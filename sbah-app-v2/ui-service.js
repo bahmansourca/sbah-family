@@ -8,24 +8,33 @@ const UIService = {
     },
 
     setupEventListeners() {
-        // Navigation principale
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const screenId = e.currentTarget.id.replace('nav-', '');
-                this.showScreen(`${screenId}-screen`);
-            });
+        // Login & Register
+        document.getElementById('login-btn')?.addEventListener('click', this.handleLogin.bind(this));
+        document.getElementById('register-btn')?.addEventListener('click', this.handleRegister.bind(this));
+        document.getElementById('register-link')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showScreen('register-screen');
+        });
+        document.getElementById('login-link')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showScreen('login-screen');
         });
 
-        // Boutons retour
-        document.querySelectorAll('.back-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.showScreen('home-screen');
-            });
+        // Navigation
+        document.getElementById('nav-home')?.addEventListener('click', () => this.showScreen('home-screen'));
+        document.getElementById('nav-deposit')?.addEventListener('click', () => this.showScreen('deposit-screen'));
+        document.getElementById('nav-history')?.addEventListener('click', () => this.showScreen('history-screen'));
+        document.getElementById('nav-ceremonies')?.addEventListener('click', () => this.showScreen('ceremonies-screen'));
+
+        // Back buttons
+        const backButtons = document.querySelectorAll('.back-btn');
+        backButtons.forEach(btn => {
+            btn.addEventListener('click', () => this.showScreen('home-screen'));
         });
     },
 
     showScreen(screenId) {
-        // Cacher tous les écrans
+        // Masquer tous les écrans
         document.querySelectorAll('.screen').forEach(screen => {
             screen.classList.add('hidden');
         });
@@ -36,27 +45,67 @@ const UIService = {
             screen.classList.remove('hidden');
             this.currentScreen = screenId;
 
-            // Mettre à jour la navigation
+            // Si c'est l'écran principal, s'assurer que main-app est visible
+            if (screenId !== 'login-screen' && screenId !== 'register-screen') {
+                document.getElementById('main-app')?.classList.remove('hidden');
+            }
+
+            // Mettre à jour la navigation active
             this.updateNavigation(screenId);
         }
     },
 
     updateNavigation(screenId) {
-        // Mettre à jour les items de navigation
+        // Retirer la classe active de tous les éléments de navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
-            if (item.id === `nav-${screenId.replace('-screen', '')}`) {
-                item.classList.add('active');
-            }
         });
+
+        // Ajouter la classe active à l'élément correspondant
+        switch (screenId) {
+            case 'home-screen':
+                document.getElementById('nav-home')?.classList.add('active');
+                break;
+            case 'deposit-screen':
+                document.getElementById('nav-deposit')?.classList.add('active');
+                break;
+            case 'history-screen':
+                document.getElementById('nav-history')?.classList.add('active');
+                break;
+            case 'ceremonies-screen':
+                document.getElementById('nav-ceremonies')?.classList.add('active');
+                break;
+        }
+    },
+
+    handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // TODO: Implémenter la logique de connexion
+        console.log('Tentative de connexion avec:', { email, password });
+    },
+
+    handleRegister(e) {
+        e.preventDefault();
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const phone = document.getElementById('reg-phone').value;
+        const country = document.getElementById('reg-country').value;
+        const city = document.getElementById('reg-city').value;
+        const password = document.getElementById('reg-password').value;
+
+        // TODO: Implémenter la logique d'inscription
+        console.log('Tentative d\'inscription avec:', { name, email, phone, country, city, password });
     },
 
     showLoading() {
-        document.getElementById('loading-overlay').classList.remove('hidden');
+        document.getElementById('loading-overlay')?.classList.remove('hidden');
     },
 
     hideLoading() {
-        document.getElementById('loading-overlay').classList.add('hidden');
+        document.getElementById('loading-overlay')?.classList.add('hidden');
     },
 
     updateBalance(amount) {

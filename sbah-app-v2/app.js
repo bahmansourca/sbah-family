@@ -1117,199 +1117,43 @@ function formatDateFull(dateString) {
     return date.toLocaleDateString('fr-FR', options);
 }
 
-// Attendre que le DOM soit complètement chargé avant d'initialiser les événements
+// Initialisation de l'application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM entièrement chargé');
+    // Vérifier si l'utilisateur est connecté
+    const isLoggedIn = localStorage.getItem('sbahFamilyUser');
     
-    // Réassigner tous les éléments DOM après le chargement complet
-    // Login & Register
-    const loginScreen = document.getElementById('login-screen');
-    const registerScreen = document.getElementById('register-screen');
-    const mainApp = document.getElementById('main-app');
-    const loginBtn = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
-    const registerLink = document.getElementById('register-link');
-    const loginLink = document.getElementById('login-link');
+    // Masquer tous les écrans
+    const screens = document.querySelectorAll('.screen');
+    screens.forEach(screen => screen.classList.add('hidden'));
     
-    // Navigation
-    const navHome = document.getElementById('nav-home');
-    const navDeposit = document.getElementById('nav-deposit');
-    const navHistory = document.getElementById('nav-history');
-    const navCeremonies = document.getElementById('nav-ceremonies');
-    
-    // Screens
-    const homeScreen = document.getElementById('home-screen');
-    const depositScreen = document.getElementById('deposit-screen');
-    const historyScreen = document.getElementById('history-screen');
-    const depositBack = document.getElementById('deposit-back-btn');
-    const historyBack = document.getElementById('history-back-btn');
-    const depositAction = document.getElementById('deposit-action');
-    const historyAction = document.getElementById('history-action');
-    const ceremoniesAction = document.getElementById('ceremonies-action');
-    const withdrawAction = document.getElementById('withdraw-action');
-    const viewAllDeposits = document.getElementById('view-all-deposits');
-    const submitDepositBtn = document.getElementById('submit-deposit-btn');
-    const depositsTab = document.getElementById('deposits-tab');
-    const withdrawalsTab = document.getElementById('withdrawals-tab');
-    const withdrawScreen = document.getElementById('withdraw-screen');
-    const withdrawBack = document.getElementById('withdraw-back-btn');
-    const submitWithdrawBtn = document.getElementById('submit-withdraw-btn');
-    const ceremoniesScreen = document.getElementById('ceremonies-screen');
-    const ceremoniesBack = document.getElementById('ceremonies-back-btn');
-    
-    // Vérifier que les éléments principaux existent avant d'attacher les événements
-    console.log("Vérification des éléments DOM après chargement complet:", {
-        loginBtn: loginBtn ? 'trouvé' : 'manquant',
-        registerBtn: registerBtn ? 'trouvé' : 'manquant',
-        registerLink: registerLink ? 'trouvé' : 'manquant',
-        loginLink: loginLink ? 'trouvé' : 'manquant'
-    });
-
-    // Attacher les événements d'authentification
-    if (loginBtn) loginBtn.addEventListener('click', login);
-    if (registerBtn) registerBtn.addEventListener('click', register);
-    if (registerLink) {
-        console.log('Ajout du gestionnaire d\'événement pour registerLink');
-        registerLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Clic sur le lien S\'inscrire');
-            showRegister();
-        });
+    // Afficher l'écran approprié
+    if (isLoggedIn) {
+        // Si l'utilisateur est connecté, afficher l'écran principal
+        document.getElementById('main-app').classList.remove('hidden');
+        document.getElementById('home-screen').classList.remove('hidden');
+    } else {
+        // Sinon, afficher l'écran de connexion
+        document.getElementById('login-screen').classList.remove('hidden');
     }
-    if (loginLink) loginLink.addEventListener('click', showLogin);
     
-    // Attacher les autres gestionnaires d'événements
-    // Navigation
-    if (navHome) navHome.addEventListener('click', showHomeScreen);
-    if (navDeposit) navDeposit.addEventListener('click', showDepositScreen);
-    if (navHistory) navHistory.addEventListener('click', showHistoryScreen);
-    if (navCeremonies) navCeremonies.addEventListener('click', showCeremoniesScreen);
+    // Initialiser les services
+    if (typeof UIService !== 'undefined') {
+        UIService.init();
+    }
     
-    // Home Actions
-    if (depositAction) depositAction.addEventListener('click', showDepositScreen);
-    if (historyAction) historyAction.addEventListener('click', showHistoryScreen);
-    if (ceremoniesAction) ceremoniesAction.addEventListener('click', showCeremoniesScreen);
-    if (withdrawAction) withdrawAction.addEventListener('click', showWithdrawScreen);
-    if (viewAllDeposits) viewAllDeposits.addEventListener('click', showHistoryScreen);
-    
-    // Back Buttons
-    if (depositBack) depositBack.addEventListener('click', showHomeScreen);
-    if (historyBack) historyBack.addEventListener('click', showHomeScreen);
-    if (withdrawBack) withdrawBack.addEventListener('click', showHomeScreen);
-    if (ceremoniesBack) ceremoniesBack.addEventListener('click', showHomeScreen);
-    
-    // History Tabs
-    if (depositsTab) depositsTab.addEventListener('click', showDepositsTab);
-    if (withdrawalsTab) withdrawalsTab.addEventListener('click', showWithdrawalsTab);
-    
-    // Add Ceremony
-    const addCeremonyBtn = document.getElementById('add-ceremony-btn');
-    const addCeremonyBack = document.getElementById('add-ceremony-back-btn');
-    const submitCeremonyBtn = document.getElementById('submit-ceremony');
-    const profileIcon = document.getElementById('profile-icon');
-    const profileBack = document.getElementById('profile-back-btn');
-    const editProfileBack = document.getElementById('edit-profile-back-btn');
-    const membersBack = document.getElementById('members-back-btn');
-    
-    if (addCeremonyBtn) addCeremonyBtn.addEventListener('click', showAddCeremonyScreen);
-    if (submitCeremonyBtn) submitCeremonyBtn.addEventListener('click', submitCeremony);
-    if (addCeremonyBack) addCeremonyBack.addEventListener('click', showCeremoniesScreen);
-    
-    // Profile
-    const editProfileBtn = document.getElementById('edit-profile-btn');
-    const saveProfileBtn = document.getElementById('save-profile-btn');
-    const showMembersBtn = document.getElementById('show-members-btn');
-    
-    if (profileIcon) profileIcon.addEventListener('click', showProfileScreen);
-    if (profileBack) profileBack.addEventListener('click', showHomeScreen);
-    if (editProfileBack) editProfileBack.addEventListener('click', showProfileScreen);
-    if (membersBack) membersBack.addEventListener('click', showProfileScreen);
-    if (editProfileBtn) editProfileBtn.addEventListener('click', showEditProfileScreen);
-    if (saveProfileBtn) saveProfileBtn.addEventListener('click', saveProfile);
-    if (showMembersBtn) showMembersBtn.addEventListener('click', showMembersScreen);
-    
-    // Deposit & Withdraw Submission
-    const submitDepositButton = document.getElementById('submit-deposit');
-    if (submitDepositButton) submitDepositButton.addEventListener('click', submitDeposit);
-    
-    const submitWithdrawButton = document.getElementById('submit-withdraw');
-    if (submitWithdrawButton) submitWithdrawButton.addEventListener('click', submitWithdrawal);
-    
-    // Amount Options
-    const amountOptions = document.querySelectorAll('.amount-option');
-    amountOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            amountOptions.forEach(o => o.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Afficher ou masquer le champ de montant personnalisé
-            const customAmountGroup = document.querySelector('.custom-amount-group');
-            if (this.getAttribute('data-amount') === 'custom') {
-                customAmountGroup.classList.remove('hidden');
-            } else {
-                customAmountGroup.classList.add('hidden');
-            }
-        });
-    });
-    
-    // Payment Methods
-    const paymentMethods = document.querySelectorAll('.payment-method');
-    paymentMethods.forEach(method => {
-        method.addEventListener('click', function() {
-            paymentMethods.forEach(m => m.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Afficher ou masquer les infos de paiement cash
-            const cashPaymentInfo = document.getElementById('cash-payment-info');
-            if (this.getAttribute('data-method') === 'cash') {
-                if (cashPaymentInfo) cashPaymentInfo.classList.remove('hidden');
-            } else {
-                if (cashPaymentInfo) cashPaymentInfo.classList.add('hidden');
-            }
-        });
-    });
-    
-    // Profile Actions
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) logoutBtn.addEventListener('click', logout);
-    const membersListBtn = document.getElementById('members-list-btn');
-    if (membersListBtn) membersListBtn.addEventListener('click', showMembersScreen);
-    const saveProfileChangesBtn = document.getElementById('save-profile-changes-btn');
-    if (saveProfileChangesBtn) saveProfileChangesBtn.addEventListener('click', saveProfileChanges);
-    
-    // Payment Method Selection
-    const paymentMethodsSelection = document.querySelectorAll('.payment-method-selection');
-    paymentMethodsSelection.forEach(method => {
-        method.addEventListener('click', function() {
-            paymentMethodsSelection.forEach(m => m.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-    
-    // Initialiser l'application après le chargement des événements
-    initApp();
+    // Mettre à jour les compteurs du footer
+    updateFooterCounters();
 });
 
-// Fonction d'initialisation de l'application
-function initApp() {
-    console.log('Initialisation de l\'application');
-    // Vérifier si un utilisateur est connecté
-    const currentUserJSON = localStorage.getItem('currentUser');
-    if (currentUserJSON) {
-        currentUser = JSON.parse(currentUserJSON);
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('main-app').classList.remove('hidden');
-        showHomeScreen();
-        updateUIForRole(currentUser.role);
-        updateProfileInfo();
-        loadData();
-    }
-}
-
-// Initialize the app
-checkLoggedInUser();
-
-// If no user is logged in, show login screen
-if (!currentUser) {
-    showLogin();
+// Fonction pour mettre à jour les compteurs du footer
+function updateFooterCounters() {
+    // Récupérer les données depuis le localStorage
+    const users = JSON.parse(localStorage.getItem('sbahFamilyUsers') || '[]');
+    const transactions = JSON.parse(localStorage.getItem('sbahFamilyTransactions') || '[]');
+    const ceremonies = JSON.parse(localStorage.getItem('sbahFamilyCeremonies') || '[]');
+    
+    // Mettre à jour les compteurs
+    document.getElementById('members-count').textContent = users.length;
+    document.getElementById('transactions-count').textContent = transactions.length;
+    document.getElementById('ceremonies-count').textContent = ceremonies.length;
 }
