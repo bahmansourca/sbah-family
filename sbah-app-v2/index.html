@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Application de gestion financière pour la famille SBah - Paiements mensuels et cérémonies familiales">
+    <meta name="theme-color" content="#2c50a8">
+    <title>SBah Family - Gestion Financière Familiale</title>
+    
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-additions.css">
+    
+    <!-- Nouveau thème amélioré -->
+    <link rel="stylesheet" href="enhanced-theme.css">
+    
+    <!-- Styles supplémentaires -->
+    <link rel="stylesheet" href="loading-animation.css">
+    <link rel="stylesheet" href="images.css">
+    <link rel="stylesheet" href="footer-styles.css">
+    <link rel="stylesheet" href="payment-styles.css">
+    
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Préchargement des scripts pour de meilleures performances -->
+    <link rel="preload" href="app.js" as="script">
+    <link rel="preload" href="paydunya-service.js" as="script">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <div class="login-container">
+                <div class="logo-container">
+                    <div class="logo">SB</div>
+                </div>
+                <h1>SBah Family</h1>
+                <div class="form-group">
+                    <label for="email">Email ou téléphone</label>
+                    <input type="text" id="email" placeholder="Votre email ou téléphone">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Votre mot de passe">
+                </div>
+                <button id="login-btn" class="primary-btn">Se connecter</button>
+                <p class="register-link">Pas encore membre? <a href="#" id="register-link">S'inscrire</a></p>
+            </div>
+        </div>
+
+        <!-- Register Screen -->
+        <div id="register-screen" class="screen hidden">
+            <div class="register-container">
+                <h1>Créer un compte</h1>
+                <div class="form-group">
+                    <label for="reg-name">Nom complet</label>
+                    <input type="text" id="reg-name" placeholder="Votre nom complet">
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" placeholder="Votre email">
+                </div>
+                <div class="form-group">
+                    <label for="reg-phone">Téléphone</label>
+                    <input type="tel" id="reg-phone" placeholder="Votre numéro de téléphone">
+                </div>
+                <div class="form-group">
+                    <label for="reg-country">Pays</label>
+                    <select id="reg-country">
+                        <option value="guinee">Guinée</option>
+                        <option value="canada">Canada</option>
+                        <option value="usa">États-Unis</option>
+                        <option value="europe">Europe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reg-city">Ville</label>
+                    <input type="text" id="reg-city" placeholder="Votre ville">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Mot de passe</label>
+                    <input type="password" id="reg-password" placeholder="Créez un mot de passe">
+                </div>
+                <button id="register-btn" class="primary-btn">S'inscrire</button>
+                <p class="login-link">Déjà membre? <a href="#" id="login-link">Se connecter</a></p>
+            </div>
+        </div>
+
+        <!-- Main App Container -->
+        <div id="main-app" class="hidden">
+            <!-- Home screen -->
+            <div id="home-screen" class="screen">
+                <div class="home-header">
+                    <div class="home-logo" id="family-logo">
+                        <!-- L'illustration de famille sera injectée ici par le script -->
+                    </div>
+                    <h2>SBah Family</h2>
+                </div>
+
+                <div class="total-balance-card">
+                    <p class="balance-label">Solde total</p>
+                    <h1 class="balance-amount" id="total-balance">0 GNF</h1>
+                </div>
+                <div class="action-buttons">
+                    <button id="deposit-action" class="action-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Verser</span>
+                    </button>
+                    <button id="history-action" class="action-btn">
+                        <i class="fas fa-history"></i>
+                        <span>Historique</span>
+                    </button>
+                    <button id="ceremonies-action" class="action-btn">
+                        <i class="fas fa-gift"></i>
+                        <span>Cérémonies</span>
+                    </button>
+                    <button id="withdraw-action" class="action-btn admin-only hidden">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Retrait</span>
+                    </button>
+                </div>
+                <div class="section-header">
+                    <h3>Derniers dépôts</h3>
+                    <a href="#" id="view-all-deposits">Voir tout</a>
+                </div>
+                <div class="section-title">Derniers dépôts</div>
+                <div id="recent-deposits" class="deposits-list">
+                    <!-- Recent deposits will be populated here -->
+                    <div class="empty-state">Aucun dépôt récent</div>
+                </div>
+                <div class="section-header">
+                    <h3>Cérémonies à venir</h3>
+                    <a href="#" id="view-all-ceremonies">Voir tout</a>
+                </div>
+                <div class="upcoming-ceremonies" id="upcoming-ceremonies">
+                    <!-- Ceremonies will be loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- Deposit Screen -->
+            <div id="deposit-screen" class="screen hidden">
+                <div class="header">
+                    <button class="back-btn" id="deposit-back-btn"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Dépôt</h2>
+                </div>
+                <div class="deposit-form">
+                    <div class="amount-options">
+                        <button class="amount-option active" data-amount="300000">
+                            <div class="amount-value">300.000</div>
+                            <div class="amount-label">Contribution standard</div>
+                        </button>
+                        <button class="amount-option" data-amount="custom">
+                            <div class="amount-value"><i class="fas fa-edit"></i></div>
+                            <div class="amount-label">Montant libre</div>
+                        </button>
+                    </div>
+                    
+                    <div class="form-group custom-amount-group hidden">
+                        <label for="deposit-amount">Montant personnalisé (GNF)</label>
+                        <input type="number" id="deposit-amount" placeholder="Saisir un montant" min="1000" step="1000">
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <h3 class="payment-title">Mode de paiement</h3>
+                        <div class="payment-method active" data-method="orange">
+                            <div class="payment-icon orange-money-icon">
+                                <!-- Orange Money logo sera injecté ici -->
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHBhdGggZmlsbD0iI0ZGNjYwMCIgZD0iTTEwLDQwaDI4YzEuMSwwLDItMC45LDItMlYxMGMwLTEuMS0wLjktMi0yLTJIMTBjLTEuMSwwLTIsMC45LTIsMnYyOEMxLDM5LjEsNy45LDQwLDEwLDQweiIvPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik0yMy45LDEwYy01LjUsMC0xMCw0LjUtMTAsMTBjMCw1LjUsNC41LDEwLDEwLDEwYzUuNSwwLDEwLTQuNSwxMC0xMEMzMy45LDE0LjUsMjkuNCwxMCwyMy45LDEweiIvPjx0ZXh0IHg9IjI0IiB5PSIyNCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkY2NjAwIj5PcmFuZ2U8L3RleHQ+PC9zdmc+" alt="Orange Money" class="payment-logo">
+                            </div>
+                            <div class="payment-info">
+                                <h4 class="payment-name">Orange Money</h4>
+                                <p class="payment-description">Paiement mobile</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="card">
+                            <div class="payment-icon"><i class="fas fa-credit-card"></i></div>
+                            <div class="payment-info">
+                                <h4 class="payment-name">Carte bancaire</h4>
+                                <p class="payment-description">Visa, Mastercard</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="cash">
+                            <div class="payment-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            <div class="payment-info">
+                                <h4 class="payment-name">Espèces</h4>
+                                <p class="payment-description">Enregistrer paiement cash</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informations de paiement cash (admin seulement) -->
+                    <div id="cash-payment-info" class="cash-payment-info hidden">
+                        <div class="form-group">
+                            <label for="cash-user">Membre qui a payé</label>
+                            <select id="cash-user">
+                                <!-- Les utilisateurs seront chargés dynamiquement -->
+                                <option value="">-- Sélectionner un membre --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cash-receipt">Numéro de reçu (optionnel)</label>
+                            <input type="text" id="cash-receipt" placeholder="Numéro de reçu">
+                        </div>
+                    </div>
+                    
+                    <div class="payment-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Votre paiement sera traité via PayDunya et envoyé directement au compte Orange Money de Thierno Sadou Bah (622538185).</p>
+                    </div>
+                    
+                    <button id="submit-deposit-btn" class="primary-btn">Procéder au paiement</button>
+                </div>
+            </div>
+
+            <!-- Withdraw Screen (Admin Only) -->
+            <div id="withdraw-screen" class="screen hidden admin-only">
+                <div class="header">
+                    <button class="back-btn" id="withdraw-back"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Retrait</h2>
+                </div>
+                <div class="withdraw-form">
+                    <div class="form-group">
+                        <label for="withdraw-amount">Montant (GNF)</label>
+                        <input type="number" id="withdraw-amount" min="1000" step="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="withdraw-reason">Motif</label>
+                        <textarea id="withdraw-reason" rows="3" placeholder="Raison du retrait..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="withdraw-ceremony">Cérémonie associée (optionnel)</label>
+                        <select id="withdraw-ceremony">
+                            <option value="">-- Aucune cérémonie --</option>
+                            <!-- Options will be loaded dynamically -->
+                        </select>
+                    </div>
+                    <button id="submit-withdraw" class="primary-btn">Retirer</button>
+                </div>
+            </div>
+
+            <!-- History Screen -->
+            <div id="history-screen" class="screen hidden">
+                <div class="header">
+                    <button class="back-btn" id="history-back"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Historique</h2>
+                </div>
+                <div class="history-tabs">
+                    <button class="tab-btn active" id="deposits-tab">Entrées</button>
+                    <button class="tab-btn" id="withdrawals-tab">Sorties</button>
+                </div>
+                <div class="history-filters">
+                    <select id="month-filter">
+                        <option value="all">Tous les mois</option>
+                        <option value="05-2025">Mai 2025</option>
+                        <option value="04-2025">Avril 2025</option>
+                        <option value="03-2025">Mars 2025</option>
+                    </select>
+                    <select id="user-filter">
+                        <option value="all">Tous les membres</option>
+                        <!-- Users will be loaded dynamically -->
+                    </select>
+                </div>
+                <div id="deposits-content" class="history-content">
+                    <!-- Deposits will be loaded dynamically -->
+                </div>
+                <div id="withdrawals-content" class="history-content hidden">
+                    <!-- Withdrawals will be loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- Ceremonies Screen -->
+            <div id="ceremonies-screen" class="screen hidden">
+                <div class="header">
+                    <button class="back-btn" id="ceremonies-back-btn"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Cérémonies</h2>
+                </div>
+                <div class="ceremonies-list" id="ceremonies-list">
+                    <!-- Ceremonies will be loaded dynamically -->
+                </div>
+                <button id="add-ceremony-btn" class="floating-btn admin-only hidden"><i class="fas fa-plus"></i></button>
+            </div>
+
+            <!-- Add Ceremony Screen (Admin Only) -->
+            <div id="add-ceremony-screen" class="screen hidden admin-only">
+                <div class="header">
+                    <button class="back-btn" id="add-ceremony-back"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Nouvelle cérémonie</h2>
+                </div>
+                <div class="ceremony-form">
+                    <div class="form-group">
+                        <label for="ceremony-title">Titre</label>
+                        <input type="text" id="ceremony-title" placeholder="Titre de la cérémonie">
+                    </div>
+                    <div class="form-group">
+                        <label for="ceremony-date">Date</label>
+                        <input type="date" id="ceremony-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="ceremony-amount">Budget estimé (GNF)</label>
+                        <input type="number" id="ceremony-amount" min="0" step="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="ceremony-description">Description</label>
+                        <textarea id="ceremony-description" rows="3" placeholder="Description de la cérémonie..."></textarea>
+                    </div>
+                    <button id="save-ceremony-btn" class="primary-btn">Enregistrer</button>
+                </div>
+            </div>
+
+            <!-- Profile Screen -->
+            <div id="profile-screen" class="screen hidden">
+                <div class="header">
+                    <button class="back-btn" id="profile-back"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Profil</h2>
+                </div>
+                <div class="profile-section">
+                    <div class="profile-avatar" id="profile-avatar">U</div>
+                    <h3 class="profile-name" id="profile-name">Utilisateur</h3>
+                    <p class="profile-status" id="profile-role">Membre</p>
+                </div>
+                <div class="profile-info">
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <p class="info-label">Email</p>
+                            <p class="info-value" id="profile-email">email@example.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <p class="info-label">Téléphone</p>
+                            <p class="info-value" id="profile-phone">+1 234 567 8900</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <p class="info-label">Pays</p>
+                            <p class="info-value" id="profile-country">USA</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-city"></i>
+                        <div>
+                            <p class="info-label">Ville</p>
+                            <p class="info-value" id="profile-city">New York</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="profile-action-btn" id="edit-profile-btn"><i class="fas fa-edit"></i> Modifier le profil</button>
+                    <button class="profile-action-btn" id="change-password-btn"><i class="fas fa-lock"></i> Changer le mot de passe</button>
+                    <button class="profile-action-btn members-list-btn admin-only hidden" id="members-list-btn"><i class="fas fa-users"></i> Liste des membres</button>
+                    <button class="profile-action-btn logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Se déconnecter</button>
+                </div>
+            </div>
+
+            <!-- Edit Profile Screen -->
+            <div id="edit-profile-screen" class="screen hidden">
+                <div class="header">
+                    <button class="back-btn" id="edit-profile-back"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Modifier le profil</h2>
+                </div>
+                <div class="edit-profile-form">
+                    <div class="form-group">
+                        <label for="edit-name">Nom complet</label>
+                        <input type="text" id="edit-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-phone">Téléphone</label>
+                        <input type="tel" id="edit-phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-country">Pays</label>
+                        <select id="edit-country">
+                            <option value="guinee">Guinée</option>
+                            <option value="canada">Canada</option>
+                            <option value="usa">États-Unis</option>
+                            <option value="europe">Europe</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-city">Ville</label>
+                        <input type="text" id="edit-city">
+                    </div>
+                    <button id="save-profile-btn" class="primary-btn">Enregistrer</button>
+                </div>
+            </div>
+
+            <!-- Members List Screen (Admin Only) -->
+            <div id="members-screen" class="screen hidden admin-only">
+                <div class="header">
+                    <button class="back-btn" id="members-back"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Membres de la famille</h2>
+                </div>
+                <div class="members-list" id="members-list">
+                    <!-- Members will be loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <div class="navigation">
+                <div class="nav-item active" id="nav-home">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </div>
+                <div class="nav-item" id="nav-deposit">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Dépôt</span>
+                </div>
+                <div class="nav-item" id="nav-history">
+                    <i class="fas fa-history"></i>
+                    <span>Historique</span>
+                </div>
+                <div class="nav-item" id="nav-ceremonies">
+                    <i class="fas fa-gift"></i>
+                    <span>Cérémonies</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading overlay luxueux -->
+        <div id="loading-overlay" class="hidden">
+            <div class="spinner-container">
+                <div class="logo-spinner">
+                    <span>S</span>
+                </div>
+                <p class="loading-text">Chargement en cours...</p>
+                <div class="loading-progress">
+                    <div class="loading-bar"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pied de page avec photos de famille SBah -->
+        <footer class="app-footer">
+            <div class="footer-title">
+                <i class="fas fa-users"></i> SBah Family - Notre Histoire
+            </div>
+            <div class="family-gallery" id="family-gallery">
+                <div class="family-image family-image-1" style="--index: 0;">
+                    <div class="family-image-caption">Fondation SBah 2023</div>
+                </div>
+                <div class="family-image family-image-2" style="--index: 1;">
+                    <div class="family-image-caption">Premier investissement</div>
+                </div>
+                <div class="family-image family-image-3" style="--index: 2;">
+                    <div class="family-image-caption">Réunion des membres</div>
+                </div>
+                <div class="family-image family-image-4" style="--index: 3;">
+                    <div class="family-image-caption">Projet immobilier</div>
+                </div>
+                <div class="family-image family-image-5" style="--index: 4;">
+                    <div class="family-image-caption">Célébration des succès</div>
+                </div>
+            </div>
+            <div class="footer-info">
+                <div class="footer-stat">
+                    <i class="fas fa-users"></i>
+                    <span id="members-count">0</span>
+                    <label>Membres</label>
+                </div>
+                <div class="footer-stat">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span id="transactions-count">0</span>
+                    <label>Transactions</label>
+                </div>
+                <div class="footer-stat">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="ceremonies-count">0</span>
+                    <label>Cérémonies</label>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                © 2025 SBah Family - Tous droits réservés
+            </div>
+        </footer>
+        
+        <!-- Indicateur de synchronisation -->
+        <div id="sync-status" class="sync-status">
+            <i class="fas fa-sync-alt"></i>
+            <span>Synchronisation en cours...</span>
+        </div>
+        
+        <!-- Indicateur de connexions actives -->
+        <div id="connected-devices" class="connected-devices">1</div>
+    </div>
+
+    <!-- Scripts principaux -->
+    <script src="app.js"></script>
+    <script src="auth-service.js"></script>
+    <script src="transaction-service.js"></script>
+    <script src="notification-service.js"></script>
+    <script src="ui-service.js"></script>
+    
+    <!-- Services de paiement -->
+    <script src="payment-handler.js"></script>
+    <script src="paydunya-service.js"></script>
+    
+    <!-- Amélioration de l'interface utilisateur -->
+    <script src="improved-ui-components.js"></script>
+    
+    <!-- Optimisations pour différents navigateurs -->
+    <script src="real-time.js"></script>
+    <script src="cross-browser-sync.js"></script>
+    <script src="safari-fix.js"></script>
+    <script src="disable-sync.js"></script>
+</body>
+</html>

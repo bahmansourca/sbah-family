@@ -1,0 +1,298 @@
+/* Animations et styles améliorés pour l'overlay de chargement */
+
+.logo-spinner {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--luxury-gradient-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 40px;
+    font-weight: 700;
+    position: relative;
+    animation: pulse 1.5s infinite ease-in-out;
+    box-shadow: 0 8px 30px rgba(30, 58, 138, 0.3);
+    margin-bottom: 25px;
+}
+
+.logo-spinner::before {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: spin 2s infinite linear;
+}
+
+.logo-spinner::after {
+    content: '';
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: spin 8s infinite linear reverse;
+}
+
+.loading-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--luxury-primary);
+    margin: 0 0 20px;
+    animation: fadeInOut 1.5s infinite ease-in-out;
+}
+
+.loading-progress {
+    width: 200px;
+    height: 4px;
+    background-color: rgba(30, 58, 138, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.loading-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 30%;
+    background: var(--luxury-gradient-gold);
+    border-radius: 10px;
+    animation: progress 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(30, 58, 138, 0.4);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 15px rgba(30, 58, 138, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(30, 58, 138, 0);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+@keyframes progress {
+    0% {
+        left: -30%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Styles supplémentaires pour la synchronisation en temps réel */
+.sync-status {
+    position: fixed;
+    bottom: 75px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--luxury-card);
+    border-radius: 30px;
+    padding: 8px 15px;
+    font-size: 12px;
+    color: var(--luxury-primary);
+    box-shadow: var(--luxury-shadow);
+    display: flex;
+    align-items: center;
+    z-index: 90;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sync-status.active {
+    opacity: 1;
+}
+
+.sync-status i {
+    margin-right: 8px;
+    animation: spin 1s infinite linear;
+}
+
+.sync-status.success i {
+    animation: none;
+    color: var(--luxury-success);
+}
+
+/* Amélioration des animations de notification */
+@keyframes slideInRight {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification {
+    animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+.notification::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--luxury-gradient-blue);
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
+
+.notification.success::before {
+    background: var(--luxury-gradient-success);
+}
+
+.notification.warning::before {
+    background: var(--luxury-gradient-warning);
+}
+
+.notification.error::before {
+    background: var(--luxury-gradient-danger);
+}
+
+/* Animation "Nouveau" pour les éléments ajoutés */
+.new-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--luxury-gradient-gold);
+    color: white;
+    border-radius: 30px;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    box-shadow: var(--luxury-shadow);
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+/* Animations de défilement luxueuses */
+.luxury-scroll {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--luxury-primary-light) var(--luxury-background);
+}
+
+.luxury-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.luxury-scroll::-webkit-scrollbar-track {
+    background: var(--luxury-background);
+    border-radius: 10px;
+}
+
+.luxury-scroll::-webkit-scrollbar-thumb {
+    background: var(--luxury-gradient-blue);
+    border-radius: 10px;
+}
+
+/* Style pour le mode de connexion entre appareils */
+.connected-devices {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: var(--luxury-card);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--luxury-primary);
+    box-shadow: var(--luxury-shadow);
+    z-index: 100;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.connected-devices::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--luxury-success);
+    border-radius: 50%;
+    bottom: -2px;
+    right: -2px;
+    border: 2px solid var(--luxury-card);
+}
+
+/* Effet de mise à jour en temps réel */
+@keyframes highlight {
+    0% {
+        background-color: rgba(59, 130, 246, 0.2);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.realtime-update {
+    animation: highlight 1.5s ease-out;
+    position: relative;
+}
+
+.realtime-update::after {
+    content: 'Mise à jour';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--luxury-gradient-blue);
+    color: white;
+    border-radius: 12px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    opacity: 0;
+    animation: fadeIn 0.3s ease 0.2s forwards, fadeOut 0.3s ease 2s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; }
+}

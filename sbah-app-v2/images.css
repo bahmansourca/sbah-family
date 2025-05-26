@@ -1,0 +1,577 @@
+/* Styles pour les avatars et images de cérémonies */
+
+/* Avatars modernes */
+.modern-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: var(--luxury-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-avatar.large {
+    width: 80px;
+    height: 80px;
+    border-radius: 24px;
+}
+
+.modern-avatar.xl {
+    width: 120px;
+    height: 120px;
+    border-radius: 30px;
+}
+
+/* Styles d'avatars par défaut */
+.avatar-style-1 {
+    background: linear-gradient(45deg, #3b82f6, #1e3a8a);
+}
+
+.avatar-style-2 {
+    background: linear-gradient(45deg, #ec4899, #9333ea);
+}
+
+.avatar-style-3 {
+    background: linear-gradient(45deg, #fbbf24, #b45309);
+}
+
+.avatar-style-4 {
+    background: linear-gradient(45deg, #10b981, #047857);
+}
+
+.avatar-style-5 {
+    background: linear-gradient(45deg, #f43f5e, #9f1239);
+}
+
+/* Patterns d'avatars */
+.avatar-pattern-1::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.2) 5%, transparent 8%),
+                      radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.2) 5%, transparent 8%);
+    background-size: 20px 20px;
+}
+
+.avatar-pattern-2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+                      linear-gradient(-45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%);
+    background-size: 10px 10px;
+}
+
+.avatar-pattern-3::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 10px 10px;
+}
+
+.avatar-initials {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modern-avatar.large .avatar-initials {
+    font-size: 30px;
+}
+
+.modern-avatar.xl .avatar-initials {
+    font-size: 40px;
+}
+
+/* Images de cérémonies */
+.ceremony-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 24px;
+    background-size: cover;
+    background-position: center;
+    margin: 0 auto 15px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--luxury-shadow);
+}
+
+/* Styles d'images de cérémonies */
+.ceremony-marriage {
+    background: linear-gradient(45deg, #3b82f6, #2563eb);
+}
+
+.ceremony-marriage::before {
+    content: '\f004'; /* Cœur */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ceremony-funeral {
+    background: linear-gradient(45deg, #1e293b, #0f172a);
+}
+
+.ceremony-funeral::before {
+    content: '\f119'; /* Visage triste */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ceremony-birthday {
+    background: linear-gradient(45deg, #ec4899, #db2777);
+}
+
+.ceremony-birthday::before {
+    content: '\f1fd'; /* Cadeau */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ceremony-party {
+    background: linear-gradient(45deg, #fbbf24, #d97706);
+}
+
+.ceremony-party::before {
+    content: '\f0fc'; /* Verre */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ceremony-religious {
+    background: linear-gradient(45deg, #10b981, #059669);
+}
+
+.ceremony-religious::before {
+    content: '\f2dd'; /* Étoile */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ceremony-other {
+    background: linear-gradient(45deg, #8b5cf6, #6d28d9);
+}
+
+.ceremony-other::before {
+    content: '\f5a2'; /* Calendrier */
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Icônes pour l'historique */
+.history-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--luxury-shadow-sm);
+    margin-right: 15px;
+}
+
+/* Icônes d'événements dans l'historique */
+.event-marriage {
+    background: linear-gradient(45deg, #3b82f6, #2563eb);
+}
+
+.event-marriage::before {
+    content: '\f004';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.event-funeral {
+    background: linear-gradient(45deg, #1e293b, #0f172a);
+}
+
+.event-funeral::before {
+    content: '\f119';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.event-birthday {
+    background: linear-gradient(45deg, #ec4899, #db2777);
+}
+
+.event-birthday::before {
+    content: '\f1fd';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.event-party {
+    background: linear-gradient(45deg, #fbbf24, #d97706);
+}
+
+.event-party::before {
+    content: '\f0fc';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.event-religious {
+    background: linear-gradient(45deg, #10b981, #059669);
+}
+
+.event-religious::before {
+    content: '\f2dd';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.event-deposit {
+    background: linear-gradient(45deg, #10b981, #059669);
+}
+
+.event-deposit::before {
+    content: '\f155';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+.event-withdrawal {
+    background: linear-gradient(45deg, #f43f5e, #be123c);
+}
+
+.event-withdrawal::before {
+    content: '\f3d1';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+}
+
+/* Images de famille pour le bas de l'app */
+.family-gallery {
+    display: flex;
+    overflow-x: auto;
+    padding: 15px 20px 25px;
+    margin-top: 20px;
+    gap: 15px;
+    position: relative;
+    scrollbar-width: none; /* Firefox */
+}
+
+.family-gallery::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.family-image {
+    min-width: 140px;
+    height: 100px;
+    border-radius: 15px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: var(--luxury-shadow);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.family-image:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: var(--luxury-shadow-lg);
+}
+
+.family-image::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.family-image-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 2;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Styles d'images de famille par défaut */
+.family-image-1 {
+    background: linear-gradient(45deg, #3b82f6, #1e3a8a);
+}
+
+.family-image-1::before {
+    content: '\f004';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 50px;
+    z-index: 1;
+}
+
+.family-image-2 {
+    background: linear-gradient(45deg, #fbbf24, #b45309);
+}
+
+.family-image-2::before {
+    content: '\f5a2';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 50px;
+    z-index: 1;
+}
+
+.family-image-3 {
+    background: linear-gradient(45deg, #ec4899, #9333ea);
+}
+
+.family-image-3::before {
+    content: '\f0c0';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 50px;
+    z-index: 1;
+}
+
+.family-image-4 {
+    background: linear-gradient(45deg, #10b981, #047857);
+}
+
+.family-image-4::before {
+    content: '\f500';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 50px;
+    z-index: 1;
+}
+
+.family-image-5 {
+    background: linear-gradient(45deg, #8b5cf6, #6d28d9);
+}
+
+.family-image-5::before {
+    content: '\f1ae';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 50px;
+    z-index: 1;
+}
+
+/* Animation d'apparition des images */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.family-image {
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: calc(var(--index) * 0.1s);
+    opacity: 0;
+}
+
+/* Titre de la galerie */
+.gallery-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--luxury-text);
+    margin: 30px 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.gallery-title::before {
+    content: '\f03e';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    margin-right: 10px;
+    color: var(--luxury-primary);
+    font-size: 20px;
+}

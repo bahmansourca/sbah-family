@@ -1,0 +1,11 @@
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:iOS Simulator, arch:arm64, id:04990EC2-E226-4A21-8252-393891BD6C31, OS:18.4, name:iPhone 16 Pro }
+{ platform:iOS Simulator, arch:x86_64, id:04990EC2-E226-4A21-8252-393891BD6C31, OS:18.4, name:iPhone 16 Pro }
+** BUILD FAILED **
+
+
+The following build commands failed:
+	SwiftEmitModule normal arm64 Emitting\ module\ for\ SBahFamily (in target 'SBahFamily' from project 'SBahFamily')
+	EmitSwiftModule normal arm64 (in target 'SBahFamily' from project 'SBahFamily')
+	Building workspace SBahFamily with scheme SBahFamily and configuration Debug
+(3 failures)

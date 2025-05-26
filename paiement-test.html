@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBah Family - Test Paiement</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background-color: #4c6ef5;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        h1 {
+            color: #4c6ef5;
+            margin: 0;
+        }
+        .payment-form {
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        input[type="text"], 
+        input[type="number"], 
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .amount-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .amount-option {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .amount-option.selected {
+            background-color: #4c6ef5;
+            color: white;
+            border-color: #4c6ef5;
+        }
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .payment-method {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .payment-method.selected {
+            background-color: #4c6ef5;
+            color: white;
+            border-color: #4c6ef5;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #4c6ef5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #364fc7;
+        }
+        .info-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .payment-status {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">SB</div>
+            <h1>SBah Family</h1>
+            <p>Contribution Familiale</p>
+        </div>
+        
+        <div class="payment-form">
+            <div class="form-group">
+                <label>Montant à payer</label>
+                <div class="amount-options">
+                    <div class="amount-option selected" onclick="selectAmount(this, 300000)">300.000 GNF</div>
+                    <div class="amount-option" onclick="selectAmount(this, 500000)">500.000 GNF</div>
+                    <div class="amount-option" onclick="selectAmount(this, 1000000)">1.000.000 GNF</div>
+                </div>
+                <div class="form-group">
+                    <label for="custom-amount">Montant personnalisé (GNF)</label>
+                    <input type="number" id="custom-amount" placeholder="Entrez un montant personnalisé" oninput="updateAmount(this.value)">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Méthode de paiement</label>
+                <div class="payment-methods">
+                    <div class="payment-method selected" onclick="selectPaymentMethod(this, 'orange')">
+                        Orange Money
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod(this, 'mtn')">
+                        MTN Mobile Money
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Numéro de téléphone</label>
+                <input type="text" id="phone" placeholder="Entrez votre numéro de téléphone">
+            </div>
+            
+            <button class="button" onclick="processPayment()">Payer maintenant</button>
+            
+            <p class="info-text">Votre paiement sera envoyé directement au compte Orange Money de Thierno Sadou Bah (622538185)</p>
+            
+            <div id="payment-status" class="payment-status"></div>
+        </div>
+    </div>
+
+    <script>
+        // Variables pour stocker les sélections
+        let selectedAmount = 300000;
+        let selectedMethod = 'orange';
+        
+        // Fonction pour sélectionner un montant
+        function selectAmount(element, amount) {
+            // Réinitialiser toutes les options
+            document.querySelectorAll('.amount-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Sélectionner l'option choisie
+            element.classList.add('selected');
+            selectedAmount = amount;
+            document.getElementById('custom-amount').value = '';
+        }
+        
+        // Fonction pour mettre à jour le montant personnalisé
+        function updateAmount(value) {
+            if (value) {
+                // Désélectionner toutes les options prédéfinies
+                document.querySelectorAll('.amount-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                selectedAmount = parseInt(value);
+            } else if (document.querySelectorAll('.amount-option.selected').length === 0) {
+                // Si aucune option n'est sélectionnée, sélectionner la première par défaut
+                document.querySelector('.amount-option').classList.add('selected');
+                selectedAmount = 300000;
+            }
+        }
+        
+        // Fonction pour sélectionner une méthode de paiement
+        function selectPaymentMethod(element, method) {
+            // Réinitialiser toutes les méthodes
+            document.querySelectorAll('.payment-method').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Sélectionner la méthode choisie
+            element.classList.add('selected');
+            selectedMethod = method;
+        }
+        
+        // Fonction pour simuler le processus de paiement
+        function processPayment() {
+            const phone = document.getElementById('phone').value;
+            const statusElement = document.getElementById('payment-status');
+            
+            // Vérifier si le numéro de téléphone est saisi
+            if (!phone) {
+                statusElement.className = 'payment-status error';
+                statusElement.textContent = 'Veuillez saisir votre numéro de téléphone.';
+                statusElement.style.display = 'block';
+                return;
+            }
+            
+            // Simuler un temps de traitement
+            statusElement.className = 'payment-status';
+            statusElement.textContent = 'Traitement de votre paiement en cours...';
+            statusElement.style.display = 'block';
+            
+            // Simuler un appel à PayDunya
+            setTimeout(() => {
+                // Simuler une réponse positive
+                statusElement.className = 'payment-status success';
+                statusElement.innerHTML = `
+                    <h3>Paiement Accepté!</h3>
+                    <p>Votre paiement de ${selectedAmount.toLocaleString()} GNF via ${selectedMethod === 'orange' ? 'Orange Money' : 'MTN Mobile Money'} a été traité avec succès.</p>
+                    <p>Un reçu a été envoyé à votre numéro.</p>
+                    <p>Référence: SBF-${Date.now().toString().substr(-8)}</p>
+                `;
+                
+                // En réalité, cette partie appellerait l'API PayDunya:
+                /*
+                const paydunyaData = {
+                    amount: selectedAmount,
+                    phone: phone,
+                    method: selectedMethod,
+                    receiver: '622538185',
+                    description: 'Contribution SBah Family'
+                };
+                
+                fetch('https://api.paydunya.com/v1/payments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer YOUR_PAYDUNYA_API_KEY'
+                    },
+                    body: JSON.stringify(paydunyaData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        statusElement.className = 'payment-status success';
+                        statusElement.textContent = 'Paiement réussi! Référence: ' + data.transaction_id;
+                    } else {
+                        statusElement.className = 'payment-status error';
+                        statusElement.textContent = 'Erreur: ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    statusElement.className = 'payment-status error';
+                    statusElement.textContent = 'Erreur de connexion au service de paiement. Veuillez réessayer.';
+                });
+                */
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

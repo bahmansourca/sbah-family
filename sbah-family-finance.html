@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBah Family</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0;
+            background-color: #FEF9D7;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 70px;
+        }
+        .screen {
+            display: none;
+            padding: 20px;
+        }
+        .active {
+            display: block;
+        }
+        .header {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+        .back-button {
+            font-size: 24px;
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .family-logo {
+            width: 150px;
+            height: 150px;
+            background-color: #D6EAF8;
+            border-radius: 50%;
+            margin: 10px auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .family-logo img {
+            width: 80%;
+            height: auto;
+        }
+        .solde-label {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .solde-amount {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 15px;
+            color: #333;
+        }
+        .deposit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .deposit-user {
+            display: flex;
+            align-items: center;
+        }
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-right: 10px;
+            color: #333;
+        }
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .user-location {
+            font-size: 14px;
+            color: #777;
+        }
+        .deposit-amount {
+            font-weight: bold;
+            color: #333;
+        }
+        .deposit-date {
+            font-size: 14px;
+            color: #777;
+        }
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .payment-option {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #FFC107;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #2E86C1;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .tab-menu {
+            display: flex;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+        }
+        .tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+            color: #777;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .tab.active {
+            color: #2E86C1;
+        }
+        .tab-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .tab-label {
+            font-size: 12px;
+        }
+        .transaction-list {
+            margin-top: 20px;
+        }
+        .transaction-tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .transaction-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 20px;
+            background-color: #f0f0f0;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .transaction-tab.active {
+            background-color: #2E86C1;
+            color: white;
+        }
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-right: 10px;
+            color: #333;
+        }
+        .ceremony-card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ceremony-image {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ceremony-image img {
+            width: 100%;
+            height: auto;
+        }
+        .ceremony-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .ceremony-amount {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Accueil Screen -->
+    <div id="accueil-screen" class="container screen active">
+        <div class="header">
+            <div class="title">SBah Family</div>
+        </div>
+        
+        <div class="family-logo">
+            <svg width="120" height="120" viewBox="0 0 24 24">
+                <g fill="#333">
+                    <circle cx="9" cy="9" r="2"/>
+                    <circle cx="15" cy="9" r="2"/>
+                    <path d="M12,2C6.48,2,2,6.48,2,12c0,5.52,4.48,10,10,10s10-4.48,10-10C22,6.48,17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8 c0-0.01,0-0.02,0-0.03c2.31-0.22,3.43-1.59,4.34-3.41C8.51,8.21,8.85,8,9.24,8c0.15,0,0.29,0.04,0.43,0.1 c0.39,0.17,0.68,0.51,0.76,0.93l1.29,7.74C11.89,17.37,12,18,12,18s0.11-0.63,0.28-1.23l1.29-7.74c0.08-0.42,0.37-0.76,0.76-0.93 C14.47,8.04,14.61,8,14.76,8c0.39,0,0.73,0.21,0.9,0.56c0.91,1.82,2.03,3.19,4.34,3.41c0,0.01,0,0.02,0,0.03 C20,16.41,16.41,20,12,20z"/>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="solde-label">Solde total</div>
+        <div class="solde-amount">10.000.000 GNF</div>
+        
+        <div class="section-title">Derniers dépôts</div>
+        
+        <div class="deposit-item">
+            <div class="deposit-user">
+                <div class="user-icon">K</div>
+                <div class="user-info">
+                    <div class="user-name">Khadija</div>
+                    <div class="user-location">Canada</div>
+                </div>
+            </div>
+            <div class="deposit-info">
+                <div class="deposit-amount">300.000 NF</div>
+                <div class="deposit-date">25.04.2024</div>
+            </div>
+        </div>
+        
+        <div class="deposit-item">
+            <div class="deposit-user">
+                <div class="user-icon">I</div>
+                <div class="user-info">
+                    <div class="user-name">Ibrahim</div>
+                    <div class="user-location">USA</div>
+                </div>
+            </div>
+            <div class="deposit-info">
+                <div class="deposit-amount">300.000 NF</div>
+                <div class="deposit-date">20.04.2024</div>
+            </div>
+        </div>
+        
+        <div class="tab-menu">
+            <div id="tab-accueil" class="tab active">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Accueil</div>
+            </div>
+            <div id="tab-depot" class="tab">
+                <div class="tab-icon">💰</div>
+                <div class="tab-label">Dépôt</div>
+            </div>
+            <div id="tab-historique" class="tab">
+                <div class="tab-icon">📜</div>
+                <div class="tab-label">Historique</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dépôt Screen -->
+    <div id="depot-screen" class="container screen">
+        <div class="header">
+            <div class="back-button" id="depot-back">←</div>
+            <div class="title">Dépôt</div>
+        </div>
+        
+        <div>
+            <div class="solde-label">Montant</div>
+            <input type="text" class="input-field" value="300000" id="depot-amount">
+        </div>
+        
+        <div class="payment-option">
+            <div class="payment-icon">O</div>
+            <div class="payment-name">Orange Money</div>
+        </div>
+        
+        <button id="verser-button" class="submit-button">Verser</button>
+        
+        <div class="tab-menu">
+            <div id="tab-accueil-2" class="tab">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Accueil</div>
+            </div>
+            <div id="tab-depot-2" class="tab active">
+                <div class="tab-icon">💰</div>
+                <div class="tab-label">Dépôt</div>
+            </div>
+            <div id="tab-historique-2" class="tab">
+                <div class="tab-icon">📜</div>
+                <div class="tab-label">Historique</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Historique Screen -->
+    <div id="historique-screen" class="container screen">
+        <div class="header">
+            <div class="back-button" id="historique-back">←</div>
+            <div class="title">Historique</div>
+        </div>
+        
+        <div class="transaction-tabs">
+            <div class="transaction-tab active" id="tab-entrees">Entrées</div>
+            <div class="transaction-tab" id="tab-sorties">Sorties</div>
+        </div>
+        
+        <div class="transaction-list" id="entrees-list">
+            <div class="transaction-item">
+                <div class="deposit-user">
+                    <div class="user-icon" style="background-color: #f8d7da;">K</div>
+                    <div class="user-info">
+                        <div class="user-name">Khadija</div>
+                        <div class="user-location">Canada</div>
+                    </div>
+                </div>
+                <div class="deposit-info">
+                    <div class="deposit-amount">300.000</div>
+                    <div class="deposit-date">300 MN</div>
+                </div>
+            </div>
+            
+            <div class="transaction-item">
+                <div class="deposit-user">
+                    <div class="user-icon" style="background-color: #d1e7dd;">I</div>
+                    <div class="user-info">
+                        <div class="user-name">Ibrahim</div>
+                        <div class="user-location">USA</div>
+                    </div>
+                </div>
+                <div class="deposit-info">
+                    <div class="deposit-amount">300.000</div>
+                    <div class="deposit-date">300 MN</div>
+                </div>
+            </div>
+            
+            <div class="transaction-item">
+                <div class="deposit-user">
+                    <div class="user-icon" style="background-color: #cff4fc;">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Aissatou</div>
+                        <div class="user-location">Europe</div>
+                    </div>
+                </div>
+                <div class="deposit-info">
+                    <div class="deposit-amount">300.000</div>
+                    <div class="deposit-date">300 MN</div>
+                </div>
+            </div>
+            
+            <div class="transaction-item">
+                <div class="deposit-user">
+                    <div class="user-icon" style="background-color: #fff3cd;">🎁</div>
+                    <div class="user-info">
+                        <div class="user-name">Mariage de</div>
+                        <div class="user-location">Fanta</div>
+                    </div>
+                </div>
+                <div class="deposit-info">
+                    <div class="deposit-amount">1.50.000</div>
+                    <div class="deposit-date">1.500.000F</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="transaction-list" id="sorties-list" style="display: none;">
+            <div class="transaction-item">
+                <div class="deposit-user">
+                    <div class="user-icon" style="background-color: #fff3cd;">🎁</div>
+                    <div class="user-info">
+                        <div class="user-name">Mariage de</div>
+                        <div class="user-location">Fanta</div>
+                    </div>
+                </div>
+                <div class="deposit-info">
+                    <div class="deposit-amount">200.000</div>
+                    <div class="deposit-date">200 MN</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-menu">
+            <div id="tab-accueil-3" class="tab">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Accueil</div>
+            </div>
+            <div id="tab-depot-3" class="tab">
+                <div class="tab-icon">💰</div>
+                <div class="tab-label">Dépôt</div>
+            </div>
+            <div id="tab-historique-3" class="tab active">
+                <div class="tab-icon">📜</div>
+                <div class="tab-label">Historique</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ceremonies Screen -->
+    <div id="ceremonies-screen" class="container screen">
+        <div class="header">
+            <div class="back-button" id="ceremonies-back">←</div>
+            <div class="title">Cérémonies</div>
+        </div>
+        
+        <div class="ceremony-card">
+            <div class="ceremony-image">
+                <svg width="150" height="150" viewBox="0 0 24 24">
+                    <g fill="#333">
+                        <path d="M13,10h-2V8h2V10z M13,6h-2V1h2V6z M7,18c-1.1,0-1.99,0.9-1.99,2S5.9,22,7,22s2-0.9,2-2S8.1,18,7,18z M17,18 c-1.1,0-1.99,0.9-1.99,2s0.89,2,1.99,2s2-0.9,2-2S18.1,18,17,18z M8.1,13h7.45c0.75,0,1.41-0.41,1.75-1.03L21,4.96L19.25,4l-3.7,7 H8.53L4.27,2H1v2h2l3.6,7.59l-1.35,2.44C4.52,15.37,5.48,17,7,17h12v-2H7L8.1,13z"/>
+                    </g>
+                </svg>
+            </div>
+            <div class="ceremony-title">Mariage de Fanta</div>
+            <div class="ceremony-amount">2.000.000 GNF</div>
+        </div>
+        
+        <div class="ceremony-card">
+            <div class="ceremony-image">
+                <svg width="150" height="150" viewBox="0 0 24 24">
+                    <g fill="#333">
+                        <path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M13.03,7.06L14.09,6l1.41,1.41 L16.91,6l1.06,1.06l-1.41,1.41l1.41,1.41l-1.06,1.06L15.5,9.54l-1.41,1.41l-1.06-1.06l1.41-1.41L13.03,7.06z M6.25,7.72h5v1.5h-5 V7.72z M11.5,16h-2v2H8v-2H6v-1.5h2v-2h1.5v2h2V16z M18,17.25h-5v-1.5h5V17.25z M18,14.75h-5v-1.5h5V14.75z"/>
+                    </g>
+                </svg>
+            </div>
+            <div class="ceremony-title">Funérailles d'Alpha</div>
+            <div class="ceremony-amount">1.000.000 GNF</div>
+        </div>
+        
+        <div class="tab-menu">
+            <div id="tab-accueil-4" class="tab">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Accueil</div>
+            </div>
+            <div id="tab-depot-4" class="tab">
+                <div class="tab-icon">💰</div>
+                <div class="tab-label">Dépôt</div>
+            </div>
+            <div id="tab-historique-4" class="tab">
+                <div class="tab-icon">📜</div>
+                <div class="tab-label">Historique</div>
+            </div>
+            <div id="tab-ceremonies" class="tab active">
+                <div class="tab-icon">🎉</div>
+                <div class="tab-label">Cérémonies</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Screen elements
+        const accueilScreen = document.getElementById('accueil-screen');
+        const depotScreen = document.getElementById('depot-screen');
+        const historiqueScreen = document.getElementById('historique-screen');
+        const ceremoniesScreen = document.getElementById('ceremonies-screen');
+        
+        // Tabs elements
+        const tabAccueil = document.getElementById('tab-accueil');
+        const tabDepot = document.getElementById('tab-depot');
+        const tabHistorique = document.getElementById('tab-historique');
+        const tabAccueil2 = document.getElementById('tab-accueil-2');
+        const tabDepot2 = document.getElementById('tab-depot-2');
+        const tabHistorique2 = document.getElementById('tab-historique-2');
+        const tabAccueil3 = document.getElementById('tab-accueil-3');
+        const tabDepot3 = document.getElementById('tab-depot-3');
+        const tabHistorique3 = document.getElementById('tab-historique-3');
+        const tabAccueil4 = document.getElementById('tab-accueil-4');
+        const tabDepot4 = document.getElementById('tab-depot-4');
+        const tabHistorique4 = document.getElementById('tab-historique-4');
+        const tabCeremonies = document.getElementById('tab-ceremonies');
+        
+        // Back buttons
+        const depotBack = document.getElementById('depot-back');
+        const historiqueBack = document.getElementById('historique-back');
+        const ceremoniesBack = document.getElementById('ceremonies-back');
+        
+        // Transaction tabs
+        const tabEntrees = document.getElementById('tab-entrees');
+        const tabSorties = document.getElementById('tab-sorties');
+        const entreesListe = document.getElementById('entrees-list');
+        const sortiesListe = document.getElementById('sorties-list');
+        
+        // Show Accueil
+        function showAccueil() {
+            accueilScreen.classList.add('active');
+            depotScreen.classList.remove('active');
+            historiqueScreen.classList.remove('active');
+            ceremoniesScreen.classList.remove('active');
+            
+            // Update tabs
+            tabAccueil.classList.add('active');
+            tabDepot.classList.remove('active');
+            tabHistorique.classList.remove('active');
+            tabAccueil2.classList.add('active');
+            tabDepot2.classList.remove('active');
+            tabHistorique2.classList.remove('active');
+            tabAccueil3.classList.add('active');
+            tabDepot3.classList.remove('active');
+            tabHistorique3.classList.remove('active');
+            tabAccueil4.classList.add('active');
+            tabDepot4.classList.remove('active');
+            tabHistorique4.classList.remove('active');
+            tabCeremonies.classList.remove('active');
+        }
+        
+        // Show Depot
+        function showDepot() {
+            accueilScreen.classList.remove('active');
+            depotScreen.classList.add('active');
+            historiqueScreen.classList.remove('active');
+            ceremoniesScreen.classList.remove('active');
+            
+            // Update tabs
+            tabAccueil.classList.remove('active');
+            tabDepot.classList.add('active');
+            tabHistorique.classList.remove('active');
+            tabAccueil2.classList.remove('active');
+            tabDepot2.classList.add('active');
+            tabHistorique2.classList.remove('active');
+            tabAccueil3.classList.remove('active');
+            tabDepot3.classList.add('active');
+            tabHistorique3.classList.remove('active');
+            tabAccueil4.classList.remove('active');
+            tabDepot4.classList.add('active');
+            tabHistorique4.classList.remove('active');
+            tabCeremonies.classList.remove('active');
+        }
+        
+        // Show Historique
+        function showHistorique() {
+            accueilScreen.classList.remove('active');
+            depotScreen.classList.remove('active');
+            historiqueScreen.classList.add('active');
+            ceremoniesScreen.classList.remove('active');
+            
+            // Update tabs
+            tabAccueil.classList.remove('active');
+            tabDepot.classList.remove('active');
+            tabHistorique.classList.add('active');
+            tabAccueil2.classList.remove('active');
+            tabDepot2.classList.remove('active');
+            tabHistorique2.classList.add('active');
+            tabAccueil3.classList.remove('active');
+            tabDepot3.classList.remove('active');
+            tabHistorique3.classList.add('active');
+            tabAccueil4.classList.remove('active');
+            tabDepot4.classList.remove('active');
+            tabHistorique4.classList.add('active');
+            tabCeremonies.classList.remove('active');
+        }
+        
+        // Show Ceremonies
+        function showCeremonies() {
+            accueilScreen.classList.remove('active');
+            depotScreen.classList.remove('active');
+            historiqueScreen.classList.remove('active');
+            ceremoniesScreen.classList.add('active');
+            
+            // Update tabs
+            tabAccueil.classList.remove('active');
+            tabDepot.classList.remove('active');
+            tabHistorique.classList.remove('active');
+            tabAccueil2.classList.remove('active');
+            tabDepot2.classList.remove('active');
+            tabHistorique2.classList.remove('active');
+            tabAccueil3.classList.remove('active');
+            tabDepot3.classList.remove('active');
+            tabHistorique3.classList.remove('active');
+            tabAccueil4.classList.remove('active');
+            tabDepot4.classList.remove('active');
+            tabHistorique4.classList.remove('active');
+            tabCeremonies.classList.add('active');
+        }
+        
+        // Tab navigation
+        tabAccueil.addEventListener('click', showAccueil);
+        tabDepot.addEventListener('click', showDepot);
+        tabHistorique.addEventListener('click', showHistorique);
+        tabAccueil2.addEventListener('click', showAccueil);
+        tabDepot2.addEventListener('click', showDepot);
+        tabHistorique2.addEventListener('click', showHistorique);
+        tabAccueil3.addEventListener('click', showAccueil);
+        tabDepot3.addEventListener('click', showDepot);
+        tabHistorique3.addEventListener('click', showHistorique);
+        tabAccueil4.addEventListener('click', showAccueil);
+        tabDepot4.addEventListener('click', showDepot);
+        tabHistorique4.addEventListener('click', showHistorique);
+        tabCeremonies.addEventListener('click', showCeremonies);
+        
+        // Back buttons
+        depotBack.addEventListener('click', showAccueil);
+        historiqueBack.addEventListener('click', showAccueil);
+        ceremoniesBack.addEventListener('click', showAccueil);
+        
+        // Transaction tabs
+        tabEntrees.addEventListener('click', function() {
+            tabEntrees.classList.add('active');
+            tabSorties.classList.remove('active');
+            entreesListe.style.display = 'block';
+            sortiesListe.style.display = 'none';
+        });
+        
+        tabSorties.addEventListener('click', function() {
+            tabEntrees.classList.remove('active');
+            tabSorties.classList.add('active');
+            entreesListe.style.display = 'none';
+            sortiesListe.style.display = 'block';
+        });
+        
+        // Verser button
+        document.getElementById('verser-button').addEventListener('click', function() {
+            alert('Dépôt effectué avec succès !');
+            showAccueil();
+        });
+    </script>
+</body>
+</html>

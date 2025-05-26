@@ -1,0 +1,807 @@
+/* Thème luxueux pour SBah Family */
+
+:root {
+  /* Palette de couleurs luxueuse */
+  --luxury-primary: #1e3a8a;
+  --luxury-primary-light: #3b82f6;
+  --luxury-primary-dark: #1e40af;
+  --luxury-gold: #d4a017;
+  --luxury-gold-light: #fbbf24;
+  --luxury-gold-dark: #b45309;
+  --luxury-background: #f8fafc;
+  --luxury-card: #ffffff;
+  --luxury-text: #0f172a;
+  --luxury-text-light: #64748b;
+  --luxury-danger: #ef4444;
+  --luxury-success: #10b981;
+  --luxury-warning: #f59e0b;
+  --luxury-info: #3b82f6;
+  
+  /* Gradients luxueux */
+  --luxury-gradient-blue: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+  --luxury-gradient-gold: linear-gradient(135deg, #fbbf24 0%, #b45309 100%);
+  --luxury-gradient-card: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  
+  /* Ombres */
+  --luxury-shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.08);
+  --luxury-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  --luxury-shadow-lg: 0 8px 20px rgba(15, 23, 42, 0.15);
+  --luxury-shadow-xl: 0 12px 28px rgba(15, 23, 42, 0.2);
+  
+  /* Animations */
+  --luxury-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Remplacer les variables globales */
+body {
+  --primary-color: var(--luxury-primary);
+  --primary-light: var(--luxury-primary-light);
+  --primary-dark: var(--luxury-primary-dark);
+  --secondary-color: var(--luxury-gold);
+  --secondary-light: var(--luxury-gold-light);
+  --secondary-dark: var(--luxury-gold-dark);
+  --background-color: var(--luxury-background);
+  --card-color: var(--luxury-card);
+  --text-color: var(--luxury-text);
+  --light-text: var(--luxury-text-light);
+  --gradient-blue: var(--luxury-gradient-blue);
+  --gradient-gold: var(--luxury-gradient-gold);
+  --box-shadow: var(--luxury-shadow);
+  --danger-color: var(--luxury-danger);
+  --success-color: var(--luxury-success);
+  --warning-color: var(--luxury-warning);
+  --info-color: var(--luxury-info);
+  
+  background-color: var(--luxury-background);
+  color: var(--luxury-text);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Style de luxe pour l'app */
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--luxury-background);
+  box-shadow: var(--luxury-shadow-lg);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Écrans de connexion */
+.login-container, .register-container {
+  background: var(--luxury-gradient-blue);
+  padding: 30px 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container::before, .register-container::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  top: -100px;
+  right: -100px;
+}
+
+.login-container::after, .register-container::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  bottom: -50px;
+  left: -50px;
+}
+
+.logo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--luxury-gradient-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 54px;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 8px 25px rgba(180, 83, 9, 0.3);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.logo::after {
+  content: '';
+  position: absolute;
+  width: 156px;
+  height: 156px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 16px;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  transition: var(--luxury-transition);
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--luxury-gold-light);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+}
+
+.primary-btn {
+  background: var(--luxury-gradient-gold);
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(180, 83, 9, 0.25);
+  transition: var(--luxury-transition);
+}
+
+.primary-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(180, 83, 9, 0.3);
+}
+
+/* Header et navigation */
+.header {
+  padding: 25px 20px 15px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+  position: relative;
+}
+
+.header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  background: var(--luxury-gradient-blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: var(--luxury-gradient-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  box-shadow: var(--luxury-shadow);
+  cursor: pointer;
+  transition: var(--luxury-transition);
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+.navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: var(--luxury-card);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  box-shadow: 0 -5px 20px rgba(15, 23, 42, 0.1);
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--luxury-text-light);
+  padding: 12px 0;
+  transition: var(--luxury-transition);
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: var(--luxury-gradient-gold);
+  bottom: -3px;
+  left: 0;
+  transition: var(--luxury-transition);
+}
+
+.nav-item.active::before {
+  bottom: 0;
+}
+
+.nav-item.active {
+  color: var(--luxury-primary);
+}
+
+.nav-item i {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.nav-item span {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Carte de solde total */
+.total-balance-card {
+  background: var(--luxury-gradient-blue);
+  border-radius: 25px;
+  padding: 30px;
+  margin: 0 20px 30px;
+  box-shadow: var(--luxury-shadow-lg);
+  position: relative;
+  overflow: hidden;
+  transform: translateY(-15px);
+}
+
+.total-balance-card::before {
+  content: '';
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  top: -75px;
+  right: -50px;
+}
+
+.total-balance-card::after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 50%;
+  bottom: -30px;
+  left: 30px;
+}
+
+.balance-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.balance-amount {
+  font-size: 42px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Boutons d'action */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin-bottom: 35px;
+  gap: 15px;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--luxury-gradient-card);
+  border-radius: 20px;
+  padding: 20px 10px;
+  flex: 1;
+  box-shadow: var(--luxury-shadow);
+  transition: var(--luxury-transition);
+  border: none;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--luxury-shadow-lg);
+}
+
+.action-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 18px;
+  background: var(--luxury-gradient-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-size: 24px;
+  color: white;
+  box-shadow: 0 5px 15px rgba(30, 58, 138, 0.15);
+}
+
+.action-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--luxury-text);
+}
+
+/* Sections et titres */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 15px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--luxury-text);
+  margin: 0;
+}
+
+.section-header a {
+  color: var(--luxury-primary);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: var(--luxury-transition);
+}
+
+.section-header a:hover {
+  color: var(--luxury-primary-dark);
+}
+
+/* Cartes et listes */
+.deposit-item, .ceremony-item, .transaction-item, .member-item {
+  background: var(--luxury-card);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 0 20px 15px;
+  box-shadow: var(--luxury-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--luxury-transition);
+}
+
+.deposit-item:hover, .ceremony-item:hover, .transaction-item:hover, .member-item:hover {
+  transform: translateY(-3px) translateX(0);
+  box-shadow: var(--luxury-shadow-lg);
+}
+
+.user-avatar, .event-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  background: var(--luxury-gradient-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  font-weight: 600;
+  margin-right: 15px;
+}
+
+.user-name, .event-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--luxury-text);
+  margin: 0 0 4px;
+}
+
+.user-location, .event-date {
+  color: var(--luxury-text-light);
+  font-size: 14px;
+  margin: 0;
+}
+
+.deposit-amount, .transaction-amount {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--luxury-text);
+  margin: 0 0 4px;
+}
+
+.withdrawal {
+  color: var(--luxury-danger);
+}
+
+/* Méthodes de paiement */
+.payment-method {
+  background: var(--luxury-card);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: var(--luxury-shadow);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--luxury-transition);
+  border: 2px solid transparent;
+}
+
+.payment-method:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--luxury-shadow-lg);
+}
+
+.payment-method.active {
+  border-color: var(--luxury-gold);
+  background: linear-gradient(to right, var(--luxury-card), rgba(251, 191, 36, 0.05));
+}
+
+.payment-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  background: var(--luxury-gradient-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+.payment-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--luxury-text);
+  margin: 0 0 4px;
+}
+
+.payment-description {
+  color: var(--luxury-text-light);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Formulaire de carte bancaire */
+.card-payment-form {
+  background: var(--luxury-card);
+  border-radius: 20px;
+  padding: 25px;
+  margin: 0 0 25px;
+  box-shadow: var(--luxury-shadow);
+  transition: var(--luxury-transition);
+}
+
+/* Onglets */
+.tabs {
+  display: flex;
+  background: var(--luxury-background);
+  border-radius: 16px;
+  margin: 0 20px 20px;
+  overflow: hidden;
+  box-shadow: var(--luxury-shadow-sm);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 15px;
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: var(--luxury-text-light);
+  cursor: pointer;
+  transition: var(--luxury-transition);
+  position: relative;
+}
+
+.tab-btn.active {
+  color: var(--luxury-primary);
+  background-color: var(--luxury-card);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--luxury-gradient-gold);
+}
+
+/* Écran de profil */
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0 30px;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 30px;
+  background: var(--luxury-gradient-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 42px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  box-shadow: var(--luxury-shadow-lg);
+}
+
+.profile-info {
+  background: var(--luxury-card);
+  border-radius: 20px;
+  padding: 25px;
+  margin: 0 20px 25px;
+  box-shadow: var(--luxury-shadow);
+}
+
+.profile-action-btn {
+  background: var(--luxury-card);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin: 0 20px 15px;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(100, 116, 139, 0.1);
+  transition: var(--luxury-transition);
+  cursor: pointer;
+}
+
+.profile-action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--luxury-shadow);
+}
+
+.profile-action-btn i {
+  color: var(--luxury-primary);
+  font-size: 20px;
+  margin-right: 15px;
+  width: 24px;
+  text-align: center;
+}
+
+/* Cartes de cérémonie */
+.ceremony-card {
+  background: var(--luxury-card);
+  border-radius: 24px;
+  padding: 25px;
+  margin: 0 20px 20px;
+  text-align: center;
+  box-shadow: var(--luxury-shadow);
+  transition: var(--luxury-transition);
+}
+
+.ceremony-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--luxury-shadow-lg);
+}
+
+.ceremony-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: var(--luxury-gradient-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 32px;
+  color: white;
+}
+
+.ceremony-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--luxury-text);
+}
+
+.ceremony-date {
+  color: var(--luxury-text-light);
+  margin: 0 0 15px;
+}
+
+.ceremony-amount {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 20px;
+  color: var(--luxury-primary);
+}
+
+.ceremony-action-btn {
+  background: var(--luxury-background);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: var(--luxury-primary);
+  cursor: pointer;
+  transition: var(--luxury-transition);
+}
+
+.ceremony-action-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* Notifications */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  max-width: 350px;
+  background: var(--luxury-card);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--luxury-shadow-lg);
+  transform: translateX(120%);
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  z-index: 1000;
+  border-left: 5px solid var(--luxury-primary);
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification.success {
+  border-left-color: var(--luxury-success);
+}
+
+.notification.warning {
+  border-left-color: var(--luxury-warning);
+}
+
+.notification.error {
+  border-left-color: var(--luxury-danger);
+}
+
+.notification-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 0 5px;
+  color: var(--luxury-text);
+}
+
+.notification-message {
+  font-size: 14px;
+  color: var(--luxury-text-light);
+  margin: 0;
+}
+
+/* Animation pour les nouveaux éléments */
+@keyframes pulse-luxury {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+  70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+.new-item {
+  animation: pulse-luxury 1.5s ease;
+  border-left: 5px solid var(--luxury-primary);
+}
+
+/* Loading overlay */
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(248, 250, 252, 0.9) !important;
+  backdrop-filter: blur(8px);
+  z-index: 9999 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(30, 58, 138, 0.1);
+  border-left-color: var(--luxury-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 20px;
+  color: var(--luxury-primary);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.screen {
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Effet 3D subtil sur les cartes */
+.deposit-item, .ceremony-item, .transaction-item, .member-item, .payment-method, .profile-action-btn, .ceremony-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.deposit-item:hover, .ceremony-item:hover, .transaction-item:hover, .member-item:hover, 
+.payment-method:hover, .profile-action-btn:hover, .ceremony-card:hover {
+  transform: translateY(-5px) perspective(1000px) rotateX(2deg);
+}
+
+/* Badges luxueux */
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.1);
+}
+
+.admin-badge {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 58, 138, 0.1) 100%);
+  color: var(--luxury-primary);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.member-badge {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(180, 83, 9, 0.1) 100%);
+  color: var(--luxury-gold-dark);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}

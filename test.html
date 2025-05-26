@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test d'interactivité</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input {
+            padding: 8px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .hidden {
+            display: none;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Page de test d'interactivité</h1>
+    
+    <div>
+        <h2>Test 1: Bouton Simple</h2>
+        <button id="test-btn">Cliquez ici</button>
+        <div id="test-result" class="hidden result">
+            Bravo! Le bouton fonctionne correctement.
+        </div>
+    </div>
+    
+    <div>
+        <h2>Test 2: Formulaire Simple</h2>
+        <div>
+            <label for="test-input">Entrez votre nom:</label>
+            <input type="text" id="test-input" placeholder="Votre nom">
+        </div>
+        <button id="submit-btn">Soumettre</button>
+        <div id="form-result" class="hidden result">
+            Bonjour, <span id="name-output"></span>! Le formulaire fonctionne correctement.
+        </div>
+    </div>
+    
+    <div>
+        <h2>Test 3: Changement d'affichage</h2>
+        <button id="toggle-btn">Afficher/Masquer</button>
+        <div id="toggle-content" class="hidden result">
+            Ce contenu peut être affiché et masqué.
+        </div>
+    </div>
+    
+    <script>
+        // Test 1: Bouton simple
+        document.getElementById('test-btn').addEventListener('click', function() {
+            console.log('Bouton test cliqué');
+            document.getElementById('test-result').classList.remove('hidden');
+        });
+        
+        // Test 2: Formulaire simple
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            const name = document.getElementById('test-input').value;
+            console.log('Formulaire soumis avec le nom:', name);
+            document.getElementById('name-output').textContent = name || 'Visiteur';
+            document.getElementById('form-result').classList.remove('hidden');
+        });
+        
+        // Test 3: Changement d'affichage
+        document.getElementById('toggle-btn').addEventListener('click', function() {
+            console.log('Bouton toggle cliqué');
+            const content = document.getElementById('toggle-content');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+            } else {
+                content.classList.add('hidden');
+            }
+        });
+        
+        // Log au chargement
+        console.log('Page de test chargée avec succès');
+    </script>
+</body>
+</html>

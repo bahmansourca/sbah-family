@@ -1,0 +1,583 @@
+:root {
+    --primary-color: #2E86C1;
+    --secondary-color: #FFC107;
+    --background-color: #F9F9F9;
+    --card-color: #FFFFFF;
+    --text-color: #333333;
+    --light-text: #777777;
+    --border-color: #EEEEEE;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+#app {
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+    background-color: var(--background-color);
+}
+
+.screen {
+    padding: 20px;
+    padding-bottom: 70px; /* Space for navigation */
+}
+
+.hidden {
+    display: none;
+}
+
+h1, h2, h3 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+}
+
+/* Login & Register Screens */
+.login-container, .register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    height: 100vh;
+}
+
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.register-link, .login-link {
+    margin-top: 20px;
+    color: var(--light-text);
+}
+
+.register-link a, .login-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-top: 10px;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.profile-icon {
+    font-size: 24px;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+/* Balance Card */
+.balance-card {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.balance-label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    opacity: 0.9;
+}
+
+.balance-amount {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-color);
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    width: 30%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.action-btn i {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-header h3 {
+    margin: 0;
+}
+
+.section-header a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Deposit Items */
+.recent-deposits, .upcoming-ceremonies {
+    margin-bottom: 25px;
+}
+
+.deposit-item, .transaction-item, .ceremony-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--card-color);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.user-info, .event-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar, .event-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-right: 12px;
+}
+
+.user-details, .event-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name, .event-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.user-location, .event-date {
+    font-size: 14px;
+    color: var(--light-text);
+}
+
+.deposit-details, .transaction-details {
+    text-align: right;
+}
+
+.deposit-amount, .transaction-amount {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.deposit-date, .transaction-date {
+    font-size: 14px;
+    color: var(--light-text);
+}
+
+.withdrawal {
+    color: var(--danger-color);
+}
+
+/* Navigation */
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--card-color);
+    border-top: 1px solid var(--border-color);
+    padding: 10px 0;
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+    color: var(--light-text);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.nav-item.active {
+    color: var(--primary-color);
+}
+
+/* Deposit Screen */
+.deposit-form {
+    padding: 20px 0;
+}
+
+.payment-methods {
+    margin-bottom: 20px;
+}
+
+.payment-methods h3 {
+    margin-bottom: 15px;
+}
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--card-color);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+}
+
+.payment-method.active {
+    border-color: var(--primary-color);
+}
+
+.payment-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: var(--light-text);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+}
+
+.payment-icon.orange {
+    background-color: var(--secondary-color);
+}
+
+/* History Screen */
+.history-tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    background-color: #e9ecef;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tab-btn:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.tab-btn:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.history-filters {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.history-filters select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* Ceremonies Screen */
+.ceremonies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ceremony-card {
+    background-color: var(--card-color);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.ceremony-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px;
+}
+
+.ceremony-image i {
+    font-size: 30px;
+    color: var(--primary-color);
+}
+
+.ceremony-title {
+    margin-bottom: 8px;
+}
+
+.ceremony-date {
+    color: var(--light-text);
+    margin-bottom: 12px;
+}
+
+.ceremony-amount {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.ceremony-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.ceremony-action-btn {
+    padding: 8px 15px;
+    background-color: #e9ecef;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.floating-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 100;
+}
+
+/* Profile Screen */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.profile-name {
+    margin-bottom: 5px;
+}
+
+.profile-status {
+    color: var(--light-text);
+    margin-bottom: 0;
+}
+
+.profile-info {
+    background-color: var(--card-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+}
+
+.info-item i {
+    color: var(--light-text);
+    margin-right: 15px;
+    font-size: 20px;
+    width: 24px;
+}
+
+.info-label {
+    color: var(--light-text);
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-weight: 500;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-action-btn {
+    padding: 12px;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.profile-action-btn i {
+    margin-right: 10px;
+    color: var(--primary-color);
+}
+
+.profile-action-btn.logout {
+    color: var(--danger-color);
+}
+
+.profile-action-btn.logout i {
+    color: var(--danger-color);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .action-btn {
+        width: 48%;
+        margin-bottom: 10px;
+    }
+}

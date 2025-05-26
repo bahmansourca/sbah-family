@@ -1,0 +1,468 @@
+/* Thème pastel pour SBah Family basé sur le design de référence */
+
+:root {
+  /* Palette de couleurs */
+  --pastel-background: #fffce0; /* Fond jaune pastel */
+  --pastel-card: #ffffff;
+  --pastel-primary: #1a5f7a; /* Bleu pour les boutons et accents */
+  --pastel-secondary: #f6d55c; /* Jaune pour les accents secondaires */
+  --pastel-text: #2d3748;
+  --pastel-text-light: #718096;
+  --pastel-success: #48bb78;
+  --pastel-danger: #f56565;
+  --pastel-orange: #ff9500; /* Pour Orange Money */
+  
+  /* Ombres */
+  --pastel-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --pastel-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --pastel-shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  /* Coins arrondis */
+  --pastel-radius-sm: 8px;
+  --pastel-radius: 12px;
+  --pastel-radius-lg: 20px;
+  --pastel-radius-xl: 30px;
+  
+  /* Transitions */
+  --pastel-transition: all 0.2s ease;
+}
+
+/* Application du thème */
+body {
+  background-color: var(--pastel-background);
+  color: var(--pastel-text);
+  font-family: 'Poppins', sans-serif;
+}
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: var(--pastel-background);
+  min-height: 100vh;
+  padding-bottom: 70px;
+}
+
+/* En-tête */
+.header {
+  padding: 20px 15px;
+  background-color: transparent;
+}
+
+.header h2 {
+  color: var(--pastel-text);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Logo principal avec illustration */
+.home-header {
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.home-logo {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 20px;
+  background-color: #e6f2ff;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--pastel-shadow);
+}
+
+.home-logo img {
+  width: 100%;
+  height: auto;
+}
+
+/* Navigation */
+.navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: var(--pastel-card);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--pastel-text-light);
+  font-size: 12px;
+}
+
+.nav-item.active {
+  color: var(--pastel-primary);
+}
+
+.nav-item i {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+/* Carte de solde total */
+.total-balance-card {
+  background-color: var(--pastel-card);
+  border-radius: var(--pastel-radius-lg);
+  padding: 20px;
+  margin: 0 20px 25px;
+  box-shadow: var(--pastel-shadow);
+  text-align: center;
+}
+
+.balance-label {
+  font-size: 16px;
+  color: var(--pastel-text-light);
+  margin-bottom: 10px;
+}
+
+.balance-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--pastel-text);
+  margin: 0;
+}
+
+/* Sections et titres */
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--pastel-text);
+  margin: 25px 20px 15px;
+}
+
+/* Éléments de liste (dépôts, transactions) */
+.deposit-item, .transaction-item, .member-item, .ceremony-item {
+  background-color: var(--pastel-card);
+  border-radius: var(--pastel-radius);
+  padding: 15px;
+  margin: 0 20px 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--pastel-shadow-sm);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e6f2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pastel-primary);
+  font-weight: 600;
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+.user-name, .event-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--pastel-text);
+  margin: 0 0 2px;
+}
+
+.user-location, .event-date {
+  font-size: 12px;
+  color: var(--pastel-text-light);
+  margin: 0;
+}
+
+.deposit-amount, .transaction-amount {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--pastel-text);
+  margin: 0;
+}
+
+.withdrawal {
+  color: var(--pastel-danger);
+}
+
+/* Cartes de cérémonies */
+.ceremony-card {
+  background-color: var(--pastel-card);
+  border-radius: var(--pastel-radius);
+  padding: 20px;
+  margin: 0 20px 15px;
+  text-align: center;
+  box-shadow: var(--pastel-shadow);
+}
+
+.ceremony-image {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 15px;
+  border-radius: var(--pastel-radius);
+  overflow: hidden;
+}
+
+.ceremony-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ceremony-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--pastel-text);
+  margin: 0 0 5px;
+}
+
+.ceremony-amount {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--pastel-text);
+  margin: 10px 0;
+}
+
+/* Formulaires */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pastel-text);
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--pastel-radius-sm);
+  font-size: 14px;
+  background-color: var(--pastel-card);
+}
+
+/* Boutons */
+.primary-btn {
+  background-color: var(--pastel-primary);
+  color: white;
+  border: none;
+  border-radius: var(--pastel-radius);
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 16px;
+  width: 100%;
+  cursor: pointer;
+  transition: var(--pastel-transition);
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
+}
+
+/* Méthodes de paiement */
+.payment-method {
+  background-color: var(--pastel-card);
+  border-radius: var(--pastel-radius);
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.payment-method.active {
+  border-color: var(--pastel-primary);
+}
+
+.payment-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #fff9e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: var(--pastel-orange);
+  font-size: 18px;
+}
+
+/* Onglets */
+.tabs {
+  display: flex;
+  background-color: #f0f0f0;
+  border-radius: var(--pastel-radius);
+  margin: 0 20px 20px;
+  overflow: hidden;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  font-weight: 500;
+  color: var(--pastel-text-light);
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background-color: var(--pastel-card);
+  color: var(--pastel-primary);
+}
+
+/* Illustrations d'avatar */
+.modern-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12px;
+}
+
+.modern-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Loading overlay */
+#loading-overlay {
+  background-color: rgba(255, 252, 224, 0.9) !important;
+}
+
+.spinner {
+  border-color: rgba(26, 95, 122, 0.1);
+  border-left-color: var(--pastel-primary);
+}
+
+.loading-text {
+  color: var(--pastel-primary);
+}
+
+/* Carte d'historique */
+.history-tabs {
+  background-color: var(--pastel-card);
+  border-radius: var(--pastel-radius);
+  padding: 5px;
+  margin: 0 20px 20px;
+  display: flex;
+}
+
+.history-tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  border-radius: var(--pastel-radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pastel-text-light);
+  cursor: pointer;
+}
+
+.history-tab.active {
+  background-color: var(--pastel-secondary);
+  color: var(--pastel-text);
+}
+
+/* Pied de page avec galerie */
+.app-footer {
+  background-color: var(--pastel-card);
+  border-top-left-radius: var(--pastel-radius-lg);
+  border-top-right-radius: var(--pastel-radius-lg);
+  margin-top: 30px;
+  padding: 30px 0;
+}
+
+.footer-title {
+  color: var(--pastel-text);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.family-gallery {
+  padding: 0 20px;
+}
+
+.family-image {
+  background-color: #f0f0f0;
+  border-radius: var(--pastel-radius);
+}
+
+.footer-info {
+  display: flex;
+  justify-content: space-around;
+  margin: 25px 20px 15px;
+}
+
+.footer-stat {
+  color: var(--pastel-text);
+}
+
+.footer-stat i {
+  color: var(--pastel-primary);
+}
+
+.footer-copyright {
+  text-align: center;
+  color: var(--pastel-text-light);
+  font-size: 12px;
+}
+
+/* Éléments spécifiques pour correspondre au design */
+.orange-money-icon {
+  background-color: #fff9e6;
+  color: var(--pastel-orange);
+}
+
+/* Adaptations spécifiques pour les cérémonies */
+.ceremony-image-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 15px;
+  position: relative;
+}
+
+.ceremony-image-illustration {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Styles pour les écrans de connexion */
+.login-container, .register-container {
+  background-color: var(--pastel-background);
+  padding: 30px 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  background-color: var(--pastel-card);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--pastel-primary);
+  margin-bottom: 30px;
+  box-shadow: var(--pastel-shadow);
+}

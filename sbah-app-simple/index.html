@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBah Family - Gestion Financière Familiale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-additions.css">
+    <meta name="description" content="Application de gestion financière pour la famille SBah, avec intégration PayDunya pour les paiements">
+    <meta name="theme-color" content="#FF6600">
+</head>
+<body>
+    <div id="app">
+        <!-- Écran de connexion -->
+        <div id="login-screen" class="screen">
+            <div class="login-container">
+                <div class="logo-container">
+                    <div class="logo">SB</div>
+                </div>
+                <h1>SBah Family</h1>
+                <div class="form-group">
+                    <label for="email">Email ou téléphone</label>
+                    <input type="text" id="email" placeholder="Votre email ou téléphone">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Votre mot de passe">
+                </div>
+                <button id="login-btn" class="primary-btn">Se connecter</button>
+                <p class="register-link">Pas encore membre? <a href="#" id="register-link">S'inscrire</a></p>
+            </div>
+        </div>
+
+        <!-- Écran d'inscription -->
+        <div id="register-screen" class="screen hidden">
+            <div class="register-container">
+                <h1>Créer un compte</h1>
+                <div class="form-group">
+                    <label for="reg-name">Nom complet</label>
+                    <input type="text" id="reg-name" placeholder="Votre nom complet">
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" placeholder="Votre email">
+                </div>
+                <div class="form-group">
+                    <label for="reg-phone">Téléphone</label>
+                    <input type="tel" id="reg-phone" placeholder="Votre numéro de téléphone">
+                </div>
+                <div class="form-group">
+                    <label for="reg-country">Pays</label>
+                    <select id="reg-country">
+                        <option value="guinee">Guinée</option>
+                        <option value="canada">Canada</option>
+                        <option value="usa">États-Unis</option>
+                        <option value="europe">Europe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reg-city">Ville</label>
+                    <input type="text" id="reg-city" placeholder="Votre ville">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Mot de passe</label>
+                    <input type="password" id="reg-password" placeholder="Créez un mot de passe">
+                </div>
+                <button id="register-btn" class="primary-btn">S'inscrire</button>
+                <p class="login-link">Déjà membre? <a href="#" id="login-link">Se connecter</a></p>
+            </div>
+        </div>
+
+        <!-- Application principale -->
+        <div id="main-app" class="hidden">
+            <!-- Écran d'accueil -->
+            <div id="home-screen" class="screen">
+                <div class="home-header">
+                    <div class="user-info">
+                        <div class="avatar-container">
+                            <div class="user-avatar">
+                                <span id="user-initials">TB</span>
+                            </div>
+                            <div class="online-indicator"></div>
+                        </div>
+                        <div>
+                            <h3 id="user-name">Chargement...</h3>
+                            <p id="user-country">Chargement...</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button id="refresh-btn" class="icon-btn"><i class="fas fa-sync-alt"></i></button>
+                        <button id="logout-btn" class="icon-btn"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </div>
+
+                <div class="balance-card">
+                    <p class="balance-label">Solde total</p>
+                    <h2 id="total-balance">0 GNF</h2>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="deposit-btn" class="action-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Verser</span>
+                    </button>
+                    <button id="history-btn" class="action-btn">
+                        <i class="fas fa-history"></i>
+                        <span>Historique</span>
+                    </button>
+                </div>
+
+                <h3 class="section-title">Derniers dépôts</h3>
+                <div id="recent-deposits" class="transactions-list">
+                    <!-- Les dépôts récents seront ajoutés ici par JavaScript -->
+                </div>
+            </div>
+
+            <!-- Écran de dépôt -->
+            <div id="deposit-screen" class="screen hidden">
+                <div class="screen-header">
+                    <button id="deposit-back-btn" class="back-btn"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Faire un dépôt</h2>
+                </div>
+
+                <div class="deposit-form">
+                    <div class="amount-options">
+                        <button class="amount-option active" data-amount="300000">
+                            <div class="amount-value">300.000</div>
+                            <div class="amount-label">Contribution standard</div>
+                        </button>
+                        <button class="amount-option" data-amount="custom">
+                            <div class="amount-value"><i class="fas fa-edit"></i></div>
+                            <div class="amount-label">Montant libre</div>
+                        </button>
+                    </div>
+                    
+                    <div class="form-group custom-amount-group hidden">
+                        <label for="custom-amount">Montant personnalisé (GNF)</label>
+                        <input type="number" id="custom-amount" placeholder="Saisir un montant" min="1000" step="1000">
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <h3>Mode de paiement</h3>
+                        <div class="payment-method active" data-method="orange">
+                            <div class="payment-icon"><i class="fas fa-mobile-alt"></i></div>
+                            <div class="payment-info">
+                                <h4>Orange Money</h4>
+                                <p>Paiement mobile</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="card">
+                            <div class="payment-icon"><i class="fas fa-credit-card"></i></div>
+                            <div class="payment-info">
+                                <h4>Carte bancaire</h4>
+                                <p>Visa, Mastercard</p>
+                            </div>
+                        </div>
+                        <div class="payment-method admin-only hidden" data-method="cash">
+                            <div class="payment-icon"><i class="fas fa-money-bill-wave"></i></div>
+                            <div class="payment-info">
+                                <h4>Espèces</h4>
+                                <p>Enregistrer paiement cash</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Votre paiement sera traité via PayDunya et envoyé directement au compte Orange Money de Thierno Sadou Bah (622538185).</p>
+                    </div>
+                    
+                    <button id="proceed-payment-btn" class="primary-btn">Procéder au paiement</button>
+                </div>
+            </div>
+
+            <!-- Écran d'historique -->
+            <div id="history-screen" class="screen hidden">
+                <div class="screen-header">
+                    <button id="history-back-btn" class="back-btn"><i class="fas fa-arrow-left"></i></button>
+                    <h2>Historique</h2>
+                </div>
+                
+                <div id="transactions-list" class="transactions-list">
+                    <!-- Les transactions seront ajoutées ici par JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay de chargement -->
+        <div id="loading-overlay" class="hidden">
+            <div class="spinner"></div>
+            <p>Chargement en cours...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="paydunya-service.js"></script>
+</body>
+</html>

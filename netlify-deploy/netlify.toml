@@ -1,0 +1,12 @@
+[build]
+  publish = "sbah-app-v2"
+  functions = "functions"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[functions]
+  external_node_modules = []
+  node_bundler = "esbuild"
