@@ -1,0 +1,76 @@
+.logo {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, #2c50a8, #4a6ed3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(44, 80, 168, 0.3);
+}
+
+.action-btn {
+    background: white;
+    border: none;
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.action-btn i {
+    font-size: 24px;
+    color: #2c50a8;
+}
+
+.action-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.total-balance-card {
+    background: linear-gradient(45deg, #2c50a8, #4a6ed3);
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(44, 80, 168, 0.3);
+}
+
+.balance-amount {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.loading-overlay {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+}
+
+.spinner-container {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.logo-spinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid #2c50a8;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+} 
