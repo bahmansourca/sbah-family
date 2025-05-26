@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Application de gestion financière pour la famille SBah - Paiements mensuels et cérémonies familiales">
     <meta name="theme-color" content="#2c50a8">
-    <title>SBah Family - Gestion Financière Familiale</title>
+    <title>SBah Family - Connexion</title>
     
     <!-- Base CSS -->
     <link rel="stylesheet" href="styles.css">
@@ -41,55 +41,63 @@
                 <div class="logo-container">
                     <div class="logo">SB</div>
                 </div>
-                <h1>SBah Family</h1>
-                <div class="form-group">
-                    <label for="email">Email ou téléphone</label>
-                    <input type="text" id="email" placeholder="Votre email ou téléphone">
-                </div>
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="password" placeholder="Votre mot de passe">
-                </div>
-                <button id="login-btn" class="primary-btn">Se connecter</button>
-                <p class="register-link">Pas encore membre? <a href="#" id="register-link">S'inscrire</a></p>
+                <h1>Connexion</h1>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email ou téléphone</label>
+                        <input type="text" id="email" name="email" required placeholder="Votre email ou téléphone">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password" required placeholder="Votre mot de passe">
+                    </div>
+                    <button type="submit" id="login-btn" class="primary-btn">Se connecter</button>
+                </form>
+                <p class="register-link">Pas encore membre ? <a href="#" id="register-link">S'inscrire</a></p>
             </div>
         </div>
 
         <!-- Register Screen -->
         <div id="register-screen" class="screen hidden">
             <div class="register-container">
-                <h1>Créer un compte</h1>
-                <div class="form-group">
-                    <label for="reg-name">Nom complet</label>
-                    <input type="text" id="reg-name" placeholder="Votre nom complet">
+                <div class="logo-container">
+                    <div class="logo">SB</div>
                 </div>
-                <div class="form-group">
-                    <label for="reg-email">Email</label>
-                    <input type="email" id="reg-email" placeholder="Votre email">
-                </div>
-                <div class="form-group">
-                    <label for="reg-phone">Téléphone</label>
-                    <input type="tel" id="reg-phone" placeholder="Votre numéro de téléphone">
-                </div>
-                <div class="form-group">
-                    <label for="reg-country">Pays</label>
-                    <select id="reg-country">
-                        <option value="guinee">Guinée</option>
-                        <option value="canada">Canada</option>
-                        <option value="usa">États-Unis</option>
-                        <option value="europe">Europe</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="reg-city">Ville</label>
-                    <input type="text" id="reg-city" placeholder="Votre ville">
-                </div>
-                <div class="form-group">
-                    <label for="reg-password">Mot de passe</label>
-                    <input type="password" id="reg-password" placeholder="Créez un mot de passe">
-                </div>
-                <button id="register-btn" class="primary-btn">S'inscrire</button>
-                <p class="login-link">Déjà membre? <a href="#" id="login-link">Se connecter</a></p>
+                <h1>Inscription</h1>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-name">Nom complet</label>
+                        <input type="text" id="reg-name" name="name" required placeholder="Votre nom complet">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" name="email" required placeholder="Votre email">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Téléphone</label>
+                        <input type="tel" id="reg-phone" name="phone" required placeholder="Votre numéro de téléphone">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-country">Pays</label>
+                        <select id="reg-country" name="country" required>
+                            <option value="">Sélectionnez votre pays</option>
+                            <option value="guinee">Guinée</option>
+                            <option value="canada">Canada</option>
+                            <option value="usa">États-Unis</option>
+                            <option value="europe">Europe</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-city">Ville</label>
+                        <input type="text" id="reg-city" name="city" required placeholder="Votre ville">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Mot de passe</label>
+                        <input type="password" id="reg-password" name="password" required placeholder="Créez un mot de passe">
+                    </div>
+                    <button type="submit" id="register-btn" class="primary-btn">S'inscrire</button>
+                </form>
+                <p class="login-link">Déjà membre ? <a href="#" id="login-link">Se connecter</a></p>
             </div>
         </div>
 

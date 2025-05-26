@@ -1119,26 +1119,38 @@ function formatDateFull(dateString) {
 
 // Initialisation de l'application
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initialisation de l\'application...');
+    
+    // Initialiser la base de données
+    DB.init();
+    
+    // Initialiser les services
+    if (typeof AuthService !== 'undefined') {
+        AuthService.init();
+    }
+    
+    if (typeof UIService !== 'undefined') {
+        UIService.init();
+    }
+    
     // Vérifier si l'utilisateur est connecté
     const isLoggedIn = localStorage.getItem('sbahFamilyUser');
+    console.log('État de connexion:', isLoggedIn ? 'Connecté' : 'Non connecté');
     
-    // Masquer tous les écrans
-    const screens = document.querySelectorAll('.screen');
-    screens.forEach(screen => screen.classList.add('hidden'));
+    // Masquer tous les écrans par défaut
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.add('hidden');
+    });
     
     // Afficher l'écran approprié
     if (isLoggedIn) {
-        // Si l'utilisateur est connecté, afficher l'écran principal
+        console.log('Affichage de l\'écran principal');
         document.getElementById('main-app').classList.remove('hidden');
         document.getElementById('home-screen').classList.remove('hidden');
+        updateUIForRole(JSON.parse(isLoggedIn).role);
     } else {
-        // Sinon, afficher l'écran de connexion
+        console.log('Affichage de l\'écran de connexion');
         document.getElementById('login-screen').classList.remove('hidden');
-    }
-    
-    // Initialiser les services
-    if (typeof UIService !== 'undefined') {
-        UIService.init();
     }
     
     // Mettre à jour les compteurs du footer
