@@ -3,7 +3,7 @@ services:
   - type: static
     name: sbah-family-frontend
     env: static
-    buildCommand: echo "Static site, no build needed"
+    buildCommand: cd sbah-app-v2 && echo "Static site ready"
     staticPublishPath: ./sbah-app-v2
     routes:
       - type: rewrite
@@ -12,13 +12,13 @@ services:
     headers:
       - path: /*
         name: Cache-Control
-        value: "public, max-age=86400"
+        value: "no-cache"
       - path: /*.js
         name: Cache-Control
-        value: "public, max-age=31536000"
+        value: "no-cache"
       - path: /*.css
         name: Cache-Control
-        value: "public, max-age=31536000"
+        value: "no-cache"
       - path: /*.png
         name: Cache-Control
         value: "public, max-age=31536000"
