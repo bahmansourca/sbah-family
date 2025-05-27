@@ -8,19 +8,29 @@ require('dotenv').config();
 
 const app = express();
 const server = http.createServer(app);
+
+// Configuration CORS pour Express
+const corsOptions = {
+    origin: ['https://sbah-family.onrender.com', 'https://sbah-family-frontend.onrender.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    maxAge: 86400 // 24 heures
+};
+
+app.use(cors(corsOptions));
+
+// Configuration de Socket.IO avec CORS
 const io = socketIO(server, {
     cors: {
-        origin: process.env.APP_URL,
+        origin: ['https://sbah-family.onrender.com', 'https://sbah-family-frontend.onrender.com'],
         methods: ["GET", "POST"],
+        allowedHeaders: ["Authorization"],
         credentials: true
     }
 });
 
 // Middleware
-app.use(cors({
-    origin: process.env.APP_URL,
-    credentials: true
-}));
 app.use(express.json());
 
 // Configuration de Socket.IO
@@ -63,6 +73,11 @@ io.on('connection', (socket) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Une erreur est survenue !');
+});
+
+// Route de test pour vérifier que le serveur fonctionne
+app.get('/', (req, res) => {
+    res.send('API SBah Family en ligne !');
 });
 
 const PORT = process.env.PORT || 5000;

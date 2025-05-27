@@ -1,6 +1,15 @@
 // Configuration
 const API_URL = 'https://sbah-family-api.onrender.com';
-const socket = io(API_URL);
+
+// Configuration Socket.IO avec options
+const socket = io(API_URL, {
+    transports: ['websocket', 'polling'],
+    withCredentials: true,
+    autoConnect: false,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000
+});
 
 // État de l'application
 let state = {
@@ -10,6 +19,12 @@ let state = {
     ceremonies: []
 };
 
+// Gestion des erreurs réseau
+function handleNetworkError(error) {
+    console.error('Erreur réseau:', error);
+    alert('Erreur de connexion au serveur. Veuillez réessayer.');
+}
+
 // Gestion de l'authentification
 async function login(email, password) {
     try {
@@ -18,7 +33,8 @@ async function login(email, password) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password }),
+            credentials: 'include'
         });
 
         const data = await response.json();
@@ -30,12 +46,13 @@ async function login(email, password) {
         state.user = data.user;
         
         // Connecter Socket.IO
-        socket.emit('authenticate', { token: data.token, userId: data.user.id });
+        socket.auth = { token: data.token };
+        socket.connect();
         
         showApp();
         loadInitialData();
     } catch (error) {
-        alert(error.message);
+        handleNetworkError(error);
     }
 }
 
@@ -58,7 +75,8 @@ async function register(userData) {
         state.user = data.user;
         
         // Connecter Socket.IO
-        socket.emit('authenticate', { token: data.token, userId: data.user.id });
+        socket.auth = { token: data.token };
+        socket.connect();
         
         showApp();
         loadInitialData();
@@ -86,7 +104,8 @@ async function checkAuth() {
         }
 
         state.user = await response.json();
-        socket.emit('authenticate', { token, userId: state.user._id });
+        socket.auth = { token };
+        socket.connect();
         
         showApp();
         loadInitialData();
@@ -332,6 +351,15 @@ document.addEventListener('DOMContentLoaded', () => {
             loadCeremonies();
             showNotification('Nouvelle cérémonie', `${data.data.title} - ${data.data.budget} GNF`);
         }
+    });
+
+    // Socket.IO error handling
+    socket.on('connect_error', (error) => {
+        console.error('Erreur de connexion Socket.IO:', error);
+    });
+
+    socket.on('error', (error) => {
+        console.error('Erreur Socket.IO:', error);
     });
 
     // Vérifier l'authentification au chargement
