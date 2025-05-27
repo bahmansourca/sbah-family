@@ -1,13 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Cercle de fond -->
-    <circle cx="100" cy="100" r="90" fill="#FF6B00"/>
+    <!-- Fond -->
+    <circle cx="100" cy="100" r="90" fill="#2C50A8"/>
     
     <!-- Silhouettes de la famille -->
-    <path d="M100 50C108.284 50 115 43.2843 115 35C115 26.7157 108.284 20 100 20C91.7157 20 85 26.7157 85 35C85 43.2843 91.7157 50 100 50Z" fill="white"/>
-    <path d="M70 70C78.2843 70 85 63.2843 85 55C85 46.7157 78.2843 40 70 40C61.7157 40 55 46.7157 55 55C55 63.2843 61.7157 70 70 70Z" fill="white"/>
-    <path d="M130 70C138.284 70 145 63.2843 145 55C145 46.7157 138.284 40 130 40C121.716 40 115 46.7157 115 55C115 63.2843 121.716 70 130 70Z" fill="white"/>
-    <path d="M100 140V60M70 140V80M130 140V80" stroke="white" stroke-width="10" stroke-linecap="round"/>
+    <g fill="white">
+        <!-- Parent 1 -->
+        <circle cx="100" cy="35" r="15"/>
+        <rect x="90" y="50" width="20" height="40" rx="10"/>
+        
+        <!-- Parent 2 -->
+        <circle cx="70" cy="55" r="15"/>
+        <rect x="60" y="70" width="20" height="40" rx="10"/>
+        
+        <!-- Enfant -->
+        <circle cx="130" cy="55" r="15"/>
+        <rect x="120" y="70" width="20" height="40" rx="10"/>
+    </g>
     
     <!-- Texte SBah -->
-    <path d="M60 160C60 160 70 150 85 150C100 150 100 170 115 170C130 170 140 160 140 160" stroke="white" stroke-width="8" stroke-linecap="round"/>
+    <path d="M60 140C60 140 80 130 100 130C120 130 140 140 140 140" 
+          stroke="white" stroke-width="8" stroke-linecap="round"/>
+    <path d="M70 150C70 150 90 160 100 160C110 160 130 150 130 150" 
+          stroke="white" stroke-width="8" stroke-linecap="round"/>
 </svg> 

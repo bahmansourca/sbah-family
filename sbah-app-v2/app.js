@@ -46,17 +46,19 @@ async function login(email, password) {
         const response = await fetch(`${API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ email, password }),
             credentials: 'include'
         });
 
-        const data = await response.json();
         if (!response.ok) {
-            throw new Error(data.message);
+            const data = await response.json();
+            throw new Error(data.message || 'Erreur de connexion');
         }
 
+        const data = await response.json();
         localStorage.setItem('token', data.token);
         state.user = data.user;
         
@@ -80,17 +82,19 @@ async function register(userData) {
         const response = await fetch(`${API_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify(userData),
             credentials: 'include'
         });
 
-        const data = await response.json();
         if (!response.ok) {
-            throw new Error(data.message);
+            const data = await response.json();
+            throw new Error(data.message || "Erreur lors de l'inscription");
         }
 
+        const data = await response.json();
         localStorage.setItem('token', data.token);
         state.user = data.user;
         
@@ -105,6 +109,43 @@ async function register(userData) {
     } catch (error) {
         hideLoading();
         handleNetworkError(error, "d'inscription");
+    }
+}
+
+async function checkAuth() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        showLoginScreen();
+        return;
+    }
+
+    try {
+        showLoading('Vérification de la session...');
+        const response = await fetch(`${API_URL}/api/auth/me`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Session expirée');
+        }
+
+        const userData = await response.json();
+        state.user = userData;
+        socket.auth = { token };
+        socket.connect();
+        
+        hideLoading();
+        showApp();
+        loadInitialData();
+    } catch (error) {
+        hideLoading();
+        localStorage.removeItem('token');
+        showLoginScreen();
+        handleNetworkError(error, 'de vérification de session');
     }
 }
 
