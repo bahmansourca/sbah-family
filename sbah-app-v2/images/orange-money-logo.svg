@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+    <circle fill="#FF6600" cx="24" cy="24" r="24"/>
+    <path fill="#FFFFFF" d="M24,12c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S30.6,12,24,12z"/>
+    <text x="24" y="28" font-family="Arial" font-size="10" text-anchor="middle" fill="#FF6600">Orange</text>
+</svg> 

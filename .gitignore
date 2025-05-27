@@ -20,9 +20,9 @@ web-build/
 .env.production.local
 
 # Debug logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 
 # IDE
 .idea/
@@ -68,3 +68,41 @@ android/.gradle
 *.aab
 *.dex
 *.class
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build files
+build/
+dist/
+.next/
+out/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Mobile
+ios/Pods/
+android/app/build/
+*.keystore
+!debug.keystore

@@ -1,9 +1,49 @@
 services:
-  # Service principal - Site statique
-  - type: static
+  # Backend API Service
+  - type: web
+    name: sbah-family-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: PAYDUNYA_MASTER_KEY
+        sync: false
+      - key: PAYDUNYA_PUBLIC_KEY
+        sync: false
+      - key: PAYDUNYA_PRIVATE_KEY
+        sync: false
+      - key: PAYDUNYA_TOKEN
+        sync: false
+      - key: PAYDUNYA_MODE
+        value: test
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: APP_URL
+        fromService:
+          name: sbah-family-frontend
+          type: web
+          property: url
+      - key: API_URL
+        fromService:
+          name: sbah-family-api
+          type: web
+          property: url
+
+  # Frontend Static Site
+  - type: web
     name: sbah-family-frontend
     env: static
-    buildCommand: cd sbah-app-v2 && echo "Static site ready"
+    buildCommand: npm install
     staticPublishPath: ./sbah-app-v2
     routes:
       - type: rewrite
@@ -28,15 +68,3 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 16.x
-
-  # Service pour les fonctions serverless (webhook PayDunya)
-  - type: web
-    name: sbah-family-api
-    env: node
-    buildCommand: cd functions && npm install
-    startCommand: node functions/server.js
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: "10000"
