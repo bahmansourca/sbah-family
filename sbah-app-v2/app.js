@@ -288,14 +288,33 @@ function showLoginScreen() {
 }
 
 function showRegisterScreen() {
+    console.log('Affichage de l\'écran d\'inscription');
     hideLoading();
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('register-screen').classList.remove('hidden');
-    document.getElementById('app').classList.add('hidden');
     
-    // Réinitialiser les formulaires
-    document.getElementById('login-form').reset();
-    document.getElementById('register-form').reset();
+    const loginScreen = document.getElementById('login-screen');
+    const registerScreen = document.getElementById('register-screen');
+    const appScreen = document.getElementById('app');
+    
+    if (loginScreen && registerScreen && appScreen) {
+        loginScreen.classList.add('hidden');
+        registerScreen.classList.remove('hidden');
+        appScreen.classList.add('hidden');
+        
+        // Réinitialiser les formulaires
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        
+        if (loginForm) loginForm.reset();
+        if (registerForm) registerForm.reset();
+        
+        console.log('Écran d\'inscription affiché avec succès');
+    } else {
+        console.error('Certains éléments sont manquants:', {
+            loginScreen: !!loginScreen,
+            registerScreen: !!registerScreen,
+            appScreen: !!appScreen
+        });
+    }
 }
 
 function showApp() {
@@ -408,15 +427,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Liens d'authentification
-    document.getElementById('show-register').addEventListener('click', (e) => {
-        e.preventDefault();
-        showRegisterScreen();
-    });
+    const showRegisterLink = document.getElementById('show-register');
+    if (showRegisterLink) {
+        showRegisterLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Clic sur le lien S\'inscrire');
+            showRegisterScreen();
+        });
+    }
 
-    document.getElementById('show-login').addEventListener('click', (e) => {
-        e.preventDefault();
-        showLoginScreen();
-    });
+    const showLoginLink = document.getElementById('show-login');
+    if (showLoginLink) {
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Clic sur le lien Se connecter');
+            showLoginScreen();
+        });
+    }
 
     // Socket.IO
     socket.on('transaction_update', (data) => {
