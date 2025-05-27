@@ -1,5 +1,5 @@
 // Configuration
-const API_URL = 'https://sbah-family-api.onrender.com/api/v1/auth';
+const API_URL = 'https://sbah-family-api.onrender.com/api/v1';
 
 // Configuration Socket.IO avec options
 const socket = io(API_URL, {
@@ -81,7 +81,10 @@ async function register(userData) {
         showLoading('Création du compte...');
         console.log('Tentative d\'inscription avec les données:', userData);
         
-        const response = await fetch(`${API_URL}/auth/register`, {
+        const url = `${API_URL}/auth/register`;
+        console.log('URL de l\'API:', url);
+        
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,8 +97,11 @@ async function register(userData) {
         });
 
         console.log('Réponse du serveur:', response.status, response.statusText);
+        console.log('Headers de la réponse:', Object.fromEntries(response.headers.entries()));
         
         const data = await response.json();
+        console.log('Données de la réponse:', data);
+        
         if (!response.ok) {
             throw new Error(data.message || "Erreur lors de l'inscription");
         }
@@ -120,6 +126,7 @@ async function register(userData) {
     } catch (error) {
         hideLoading();
         console.error('Erreur détaillée:', error);
+        console.error('Stack trace:', error.stack);
         
         let errorMessage = "Une erreur est survenue lors de l'inscription.";
         if (error.message.includes('CORS')) {
