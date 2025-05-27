@@ -1,17 +1,17 @@
 :root {
-    --primary-color: #1a237e;
+    --primary-color: #FF6B00;
     --primary-light: #4C87E0;
     --primary-dark: #0A3A8C;
-    --secondary-color: #ffeb3b;
+    --secondary-color: #2D3748;
     --secondary-light: #FFD54F;
     --secondary-dark: #FFA000;
-    --background-color: #fff9e6;
+    --background-color: #F7FAFC;
     --card-color: #FFFFFF;
-    --text-color: #1a237e;
+    --text-color: #1A202C;
     --light-text: #777777;
-    --border-color: #EEEEEE;
-    --success-color: #28a745;
-    --danger-color: #dc3545;
+    --border-color: #E2E8F0;
+    --success-color: #48BB78;
+    --danger-color: #F56565;
     --warning-color: #ffc107;
     --info-color: #17a2b8;
     --gradient-blue: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%);
@@ -20,6 +20,7 @@
     --animation-duration: 0.3s;
     --gray-text: #666;
     --light-gray: #eee;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -285,10 +286,10 @@ h2 {
 
 /* Balance Card */
 .balance-card {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, var(--primary-color), #FF8533);
     color: white;
-    padding: 25px;
-    border-radius: 16px;
+    padding: 30px;
+    border-radius: 15px;
     text-align: center;
     margin-bottom: 25px;
     box-shadow: 0 6px 16px rgba(31, 94, 186, 0.2);
@@ -301,18 +302,14 @@ h2 {
     box-shadow: 0 8px 20px rgba(31, 94, 186, 0.25);
 }
 
-.balance-label {
-    font-size: 16px;
+.balance-card p {
+    opacity: 0.8;
     margin-bottom: 10px;
-    opacity: 0.9;
-    font-weight: 400;
 }
 
-.balance-amount {
-    font-size: 36px;
-    font-weight: 700;
-    margin: 0;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.balance-card h1 {
+    font-size: 32px;
+    font-weight: 600;
 }
 
 /* Action Buttons */
@@ -876,5 +873,33 @@ h2 {
     .action-btn {
         min-width: calc(50% - 15px);
         margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .screen {
+        padding: 15px;
+    }
+
+    .balance-card h1 {
+        font-size: 28px;
+    }
+
+    .ceremonies-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        margin: 20px;
+    }
+
+    .nav-item i {
+        font-size: 20px;
+    }
+
+    .nav-item span {
+        font-size: 10px;
     }
 }

@@ -32,74 +32,84 @@ cd sbah-family
 npm install
 ```
 
-3. Créez un fichier `.env` à la racine du projet :
+3. Créez un fichier `.env` à la racine du projet avec les variables suivantes :
 ```env
-MONGODB_URI=votre-uri-mongodb
-JWT_SECRET=votre-secret-jwt
+# Configuration de l'application
+PORT=5000
+NODE_ENV=development
+
+# Base de données MongoDB
+MONGODB_URI=mongodb+srv://your-username:your-password@your-cluster.mongodb.net/sbah-family
+
+# JWT
+JWT_SECRET=your-jwt-secret
 
 # PayDunya
-PAYDUNYA_MASTER_KEY=votre-master-key
-PAYDUNYA_PUBLIC_KEY=votre-public-key
-PAYDUNYA_PRIVATE_KEY=votre-private-key
-PAYDUNYA_TOKEN=votre-token
+PAYDUNYA_MASTER_KEY=your-master-key
+PAYDUNYA_PUBLIC_KEY=your-public-key
+PAYDUNYA_PRIVATE_KEY=your-private-key
+PAYDUNYA_TOKEN=your-token
 PAYDUNYA_MODE=test
 
 # Email
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=votre-email@gmail.com
-SMTP_PASS=votre-mot-de-passe-app
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-specific-password
 
 # URLs
-APP_URL=http://localhost:3000
-API_URL=http://localhost:5000
+APP_URL=https://sbah-family.onrender.com
+API_URL=https://sbah-family-api.onrender.com
 ```
 
-4. Démarrez l'application :
+4. Démarrez le serveur de développement :
 ```bash
-# Mode développement
 npm run dev
-
-# Mode production
-npm start
 ```
 
 ## Déploiement
 
-L'application est configurée pour être déployée sur Render.com :
+L'application est déployée sur Render.com avec les configurations suivantes :
 
-1. Frontend : Static Site
-2. Backend : Web Service
+### Frontend (sbah-family.onrender.com)
+- Build Command : `npm install`
+- Start Command : `npm start`
+- Auto-Deploy : Enabled
 
-### Variables d'environnement sur Render
-
-Configurez les variables d'environnement suivantes dans les paramètres de votre service Render :
-
-- `MONGODB_URI`
-- `JWT_SECRET`
-- `PAYDUNYA_MASTER_KEY`
-- `PAYDUNYA_PUBLIC_KEY`
-- `PAYDUNYA_PRIVATE_KEY`
-- `PAYDUNYA_TOKEN`
-- `PAYDUNYA_MODE`
-- `SMTP_HOST`
-- `SMTP_PORT`
-- `SMTP_USER`
-- `SMTP_PASS`
-- `APP_URL`
-- `API_URL`
+### Backend API (sbah-family-api.onrender.com)
+- Build Command : `npm install`
+- Start Command : `npm start`
+- Auto-Deploy : Enabled
+- Environment Variables : Configurées dans le dashboard Render
 
 ## Structure du projet
 
 ```
 sbah-family/
-├── models/           # Modèles MongoDB
-├── services/         # Services (PayDunya, Notifications)
-├── routes/          # Routes API
-├── middleware/      # Middleware Express
-├── sbah-app-v2/     # Frontend
-└── server.js        # Point d'entrée du serveur
+├── frontend/           # Code frontend
+│   ├── index.html     # Page principale
+│   ├── styles.css     # Styles CSS
+│   ├── app.js         # Logique JavaScript
+│   └── images/        # Images et assets
+├── backend/           # Code backend
+│   ├── models/        # Modèles MongoDB
+│   ├── routes/        # Routes API
+│   ├── services/      # Services (PayDunya, Email)
+│   └── middleware/    # Middleware (Auth)
+└── README.md          # Documentation
 ```
+
+## Contribution
+
+1. Fork le projet
+2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/nouvelle-fonctionnalite`)
+3. Committez vos changements (`git commit -m 'Ajout d'une nouvelle fonctionnalité'`)
+4. Push vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
+5. Ouvrez une Pull Request
+
+## Support
+
+Pour toute question ou problème, veuillez ouvrir une issue sur GitHub.
 
 ## Contact
 

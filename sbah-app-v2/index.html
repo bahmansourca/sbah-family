@@ -14,119 +14,158 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div id="app">
-        <!-- Home Screen -->
+    <!-- Écran de connexion -->
+    <div id="login-screen" class="screen">
+        <div class="auth-container">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="SBah Family Logo" class="logo">
+                <h1>SBah Family</h1>
+            </div>
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-password" placeholder="Mot de passe" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                <button type="submit" class="btn-primary">Se connecter</button>
+                <p class="auth-switch">Pas encore membre ? <a href="#" id="show-register">S'inscrire</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Écran d'inscription -->
+    <div id="register-screen" class="screen hidden">
+        <div class="auth-container">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="SBah Family Logo" class="logo">
+                <h1>Rejoindre SBah Family</h1>
+            </div>
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="register-name" placeholder="Nom complet" required>
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="register-email" placeholder="Email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="register-phone" placeholder="Téléphone" required>
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="form-group">
+                    <select id="register-country" required>
+                        <option value="">Sélectionnez votre pays</option>
+                        <option value="Guinée">Guinée</option>
+                        <option value="Canada">Canada</option>
+                        <option value="USA">USA</option>
+                        <option value="Europe">Europe</option>
+                    </select>
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="register-city" placeholder="Ville" required>
+                    <i class="fas fa-city"></i>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="register-password" placeholder="Mot de passe" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                <button type="submit" class="btn-primary">S'inscrire</button>
+                <p class="auth-switch">Déjà membre ? <a href="#" id="show-login">Se connecter</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application principale -->
+    <div id="app" class="hidden">
+        <!-- Navigation -->
+        <nav class="nav-bar">
+            <div class="nav-item active" id="nav-home">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item" id="nav-deposit">
+                <i class="fas fa-plus"></i>
+                <span>Déposer</span>
+            </div>
+            <div class="nav-item" id="nav-history">
+                <i class="fas fa-history"></i>
+                <span>Historique</span>
+            </div>
+            <div class="nav-item" id="nav-profile">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
+            </div>
+        </nav>
+
+        <!-- Écran d'accueil -->
         <div id="home-screen" class="screen">
-            <h1>SBah Family</h1>
-            <div class="family-illustration">
-                <img src="images/family-illustration.svg" alt="SBah Family">
+            <div class="header">
+                <h2>Bienvenue, <span id="user-name"></span></h2>
+                <div class="balance-card">
+                    <p>Solde total</p>
+                    <h1 class="balance-amount">0 GNF</h1>
+                </div>
             </div>
-            <div class="total-balance">
-                <p class="balance-label">Solde total</p>
-                <h2 class="balance-amount">10.000.000 GNF</h2>
-            </div>
+
             <div class="recent-deposits">
                 <h3 class="section-title">Derniers dépôts</h3>
-                <div class="deposit-item">
-                    <div class="user-avatar">K</div>
-                    <div class="user-info">
-                        <p class="user-name">Khadija</p>
-                        <p class="user-location">Canada</p>
-                    </div>
-                    <div class="deposit-details">
-                        <p class="deposit-amount">300.000 NF</p>
-                        <p class="deposit-date">25.4.2024</p>
-                    </div>
-                </div>
-                <div class="deposit-item">
-                    <div class="user-avatar">I</div>
-                    <div class="user-info">
-                        <p class="user-name">Ibrahim</p>
-                        <p class="user-location">USA</p>
-                    </div>
-                    <div class="deposit-details">
-                        <p class="deposit-amount">300.000 NF</p>
-                        <p class="deposit-date">20.4.2024</p>
-                    </div>
-                </div>
+                <div class="deposits-container"></div>
+            </div>
+
+            <div class="ceremonies-section">
+                <h3 class="section-title">Cérémonies à venir</h3>
+                <div class="ceremonies-container"></div>
             </div>
         </div>
 
-        <!-- Deposit Screen -->
+        <!-- Écran de dépôt -->
         <div id="deposit-screen" class="screen hidden">
             <div class="header">
                 <button class="back-button"><i class="fas fa-arrow-left"></i></button>
-                <h1>Dépôt</h1>
+                <h2>Faire un dépôt</h2>
             </div>
-            <input type="text" class="amount-input" value="300000" readonly>
-            <div class="payment-method">
-                <img src="images/orange-money-logo.svg" alt="Orange Money" class="payment-logo">
-                <p class="payment-name">Orange Money</p>
+            <div class="deposit-form">
+                <div class="amount-input-container">
+                    <input type="number" class="amount-input" placeholder="0" min="1000">
+                    <span class="currency">GNF</span>
+                </div>
+                <div class="payment-methods">
+                    <h3>Méthode de paiement</h3>
+                    <div class="payment-method active">
+                        <img src="images/orange-money-logo.svg" alt="Orange Money">
+                        <span>Orange Money</span>
+                    </div>
+                </div>
+                <button class="submit-button">Continuer</button>
             </div>
-            <button class="submit-button">Verser</button>
         </div>
 
-        <!-- History Screen -->
+        <!-- Écran d'historique -->
         <div id="history-screen" class="screen hidden">
             <div class="header">
                 <button class="back-button"><i class="fas fa-arrow-left"></i></button>
-                <h1>Historique</h1>
+                <h2>Historique</h2>
             </div>
-            <div class="tabs">
-                <div class="tab active">Entrées</div>
-                <div class="tab">Sorties</div>
-            </div>
-            <div class="transactions">
-                <div class="deposit-item">
-                    <div class="user-avatar">K</div>
-                    <div class="user-info">
-                        <p class="user-name">Khadija</p>
-                        <p class="user-location">Canada</p>
-                    </div>
-                    <div class="deposit-details">
-                        <p class="deposit-amount">300.000</p>
-                        <p class="deposit-date">300 MN</p>
-                    </div>
-                </div>
-                <!-- Autres transactions... -->
-            </div>
+            <div class="transactions-container"></div>
         </div>
 
-        <!-- Ceremonies Screen -->
-        <div id="ceremonies-screen" class="screen hidden">
+        <!-- Écran de profil -->
+        <div id="profile-screen" class="screen hidden">
             <div class="header">
                 <button class="back-button"><i class="fas fa-arrow-left"></i></button>
-                <h1>Cérémonies</h1>
+                <h2>Mon profil</h2>
             </div>
-            <div class="ceremony-card">
-                <img src="images/wedding.jpg" alt="Mariage" class="ceremony-image">
-                <h3 class="ceremony-title">Mariage de Fanta</h3>
-                <p class="ceremony-amount">2.000.000 GNF</p>
-            </div>
-            <div class="ceremony-card">
-                <img src="images/memorial.jpg" alt="Funérailles" class="ceremony-image">
-                <h3 class="ceremony-title">Funérailles d'Alpha</h3>
-                <p class="ceremony-amount">1.000.000 GNF</p>
-            </div>
+            <div class="profile-info"></div>
+            <button id="logout-button" class="btn-danger">Se déconnecter</button>
         </div>
-
-        <!-- Navigation Bar -->
-        <nav class="nav-bar">
-            <a href="#" class="nav-item active" id="nav-home">
-                <i class="fas fa-home nav-icon"></i>
-                <span class="nav-label">Accueil</span>
-            </a>
-            <a href="#" class="nav-item" id="nav-deposit">
-                <i class="fas fa-plus-circle nav-icon"></i>
-                <span class="nav-label">Dépôt</span>
-            </a>
-            <a href="#" class="nav-item" id="nav-history">
-                <i class="fas fa-history nav-icon"></i>
-                <span class="nav-label">Historique</span>
-            </a>
-        </nav>
     </div>
 
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
