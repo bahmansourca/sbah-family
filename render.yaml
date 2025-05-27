@@ -2,40 +2,33 @@ services:
   # Backend API Service
   - type: web
     name: sbah-family-api
-    env: node
-    buildCommand: npm install
-    startCommand: npm start
+    env: docker
+    plan: free
+    buildCommand: "./mvnw clean package -DskipTests"
+    startCommand: "java -jar target/*.jar"
     envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 5000
-      - key: MONGODB_URI
-        sync: false
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SERVER_PORT
+        value: 8080
+      - key: JAVA_OPTS
+        value: "-Xmx512m -Xms256m"
       - key: JWT_SECRET
-        sync: false
-      - key: PAYDUNYA_MASTER_KEY
-        sync: false
-      - key: PAYDUNYA_PUBLIC_KEY
-        sync: false
-      - key: PAYDUNYA_PRIVATE_KEY
-        sync: false
-      - key: PAYDUNYA_TOKEN
-        sync: false
-      - key: SMTP_HOST
-        sync: false
-      - key: SMTP_PORT
-        sync: false
-      - key: SMTP_USER
-        sync: false
-      - key: SMTP_PASS
-        sync: false
-    healthCheckPath: /
+        generateValue: true
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: sbah-family-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: sbah-family-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: sbah-family-db
+          property: password
+    healthCheckPath: /api/v1/health
     autoDeploy: true
-    disk:
-      name: sbah-family-data
-      mountPath: /data
-      sizeGB: 1
 
   # Frontend Service
   - type: web
@@ -44,8 +37,8 @@ services:
     buildCommand: npm install
     staticPublishPath: ./sbah-app-v2
     envVars:
-      - key: API_URL
-        value: https://sbah-family-api.onrender.com
+      - key: REACT_APP_API_URL
+        value: https://sbah-family-api.onrender.com/api/v1
     routes:
       - type: rewrite
         source: /*
@@ -64,3 +57,8 @@ services:
         name: Access-Control-Allow-Credentials
         value: "true"
     autoDeploy: true
+
+databases:
+  - name: sbah-family-db
+    plan: free
+    type: mysql

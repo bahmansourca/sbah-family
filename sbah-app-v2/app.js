@@ -1,5 +1,5 @@
 // Configuration
-const API_URL = 'https://sbah-family-api.onrender.com';
+const API_URL = 'https://sbah-backend.onrender.com/api/v1';
 
 // Configuration Socket.IO avec options
 const socket = io(API_URL, {
@@ -43,7 +43,7 @@ function showNotification(title, message, type = 'info') {
 async function login(email, password) {
     try {
         showLoading('Connexion en cours...');
-        const response = await fetch(`${API_URL}/api/auth/login`, {
+        const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ async function register(userData) {
         showLoading('Création du compte...');
         console.log('Tentative d\'inscription avec les données:', userData);
         
-        const response = await fetch(`${API_URL}/api/auth/register`, {
+        const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ async function checkAuth() {
 
     try {
         showLoading('Vérification de la session...');
-        const response = await fetch(`${API_URL}/api/auth/me`, {
+        const response = await fetch(`${API_URL}/auth/me`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -206,7 +206,7 @@ async function loadInitialData() {
 
 async function loadBalance() {
     try {
-        const response = await fetch(`${API_URL}/api/transactions/balance`, {
+        const response = await fetch(`${API_URL}/transactions/balance`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -221,7 +221,7 @@ async function loadBalance() {
 
 async function loadTransactions() {
     try {
-        const response = await fetch(`${API_URL}/api/transactions/recent`, {
+        const response = await fetch(`${API_URL}/transactions/recent`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -236,7 +236,7 @@ async function loadTransactions() {
 
 async function loadCeremonies() {
     try {
-        const response = await fetch(`${API_URL}/api/ceremonies`, {
+        const response = await fetch(`${API_URL}/ceremonies`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -357,7 +357,7 @@ function showApp() {
 // Gestion des paiements
 async function initializePayment(amount) {
     try {
-        const response = await fetch(`${API_URL}/api/payments/initialize`, {
+        const response = await fetch(`${API_URL}/payments/initialize`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
