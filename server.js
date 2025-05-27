@@ -20,19 +20,35 @@ const allowedOrigins = [
     'https://sbah-family.onrender.com',
     'https://sbah-family-frontend.onrender.com',
     'http://localhost:3000',
-    'http://localhost:5000'
+    'http://localhost:5000',
+    'http://localhost:10000'
 ];
 
 // Middleware pour gérer les en-têtes CORS manuellement
 app.use((req, res, next) => {
     const origin = req.headers.origin;
+    console.log('Origin de la requête:', origin);
+    
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
+    } else {
+        // En développement, autoriser toutes les origines
+        if (process.env.NODE_ENV === 'development') {
+            res.setHeader('Access-Control-Allow-Origin', origin || '*');
+        }
     }
+    
+    // Ajouter plus de logs pour le débogage
+    console.log('Headers de la requête:', req.headers);
+    
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Max-Age', '86400');
+    
+    // Log des headers CORS
+    console.log('Headers CORS configurés:', res.getHeaders());
+    
     next();
 });
 
@@ -119,7 +135,12 @@ app.get('/', (req, res) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
+// Modification de la configuration du port
+const PORT = process.env.PORT || 10000;
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`Serveur démarré sur le port ${PORT} en mode ${process.env.NODE_ENV}`);
+    console.log('Configuration CORS:', {
+        allowedOrigins,
+        environment: process.env.NODE_ENV
+    });
 });
