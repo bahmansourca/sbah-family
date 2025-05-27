@@ -815,51 +815,69 @@ h2 {
     position: fixed;
     top: 20px;
     right: 20px;
-    padding: 15px 20px;
+    padding: 1rem 1.5rem;
     border-radius: 8px;
     background: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     max-width: 350px;
     animation: slideIn 0.3s ease-out;
+    transform-origin: top right;
 }
 
 .notification h4 {
-    margin: 0 0 5px 0;
-    font-size: 16px;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
     font-weight: 600;
+    color: var(--text-color);
 }
 
 .notification p {
     margin: 0;
-    font-size: 14px;
+    font-size: 0.9rem;
     color: var(--light-text);
+    line-height: 1.4;
 }
 
 .notification.success {
     border-left: 4px solid var(--success-color);
+    background: linear-gradient(to right, rgba(72, 187, 120, 0.1), white);
 }
 
 .notification.error {
     border-left: 4px solid var(--danger-color);
+    background: linear-gradient(to right, rgba(245, 101, 101, 0.1), white);
 }
 
 .notification.info {
     border-left: 4px solid var(--info-color);
+    background: linear-gradient(to right, rgba(66, 153, 225, 0.1), white);
 }
 
 .notification.warning {
     border-left: 4px solid var(--warning-color);
+    background: linear-gradient(to right, rgba(236, 201, 75, 0.1), white);
 }
 
 @keyframes slideIn {
-    from {
-        transform: translateX(100%);
+    0% {
+        transform: translateX(100%) scale(0.8);
         opacity: 0;
     }
-    to {
-        transform: translateX(0);
+    100% {
+        transform: translateX(0) scale(1);
         opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%) scale(0.8);
+        opacity: 0;
     }
 }
 

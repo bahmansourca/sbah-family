@@ -100,10 +100,17 @@ async function register(userData) {
             throw new Error(data.message || "Erreur lors de l'inscription");
         }
 
+        // Sauvegarder les informations de connexion
+        localStorage.setItem('lastEmail', userData.email);
+        
+        hideLoading();
         showNotification('Succès', 'Compte créé avec succès ! Vous pouvez maintenant vous connecter.', 'success');
         
         // Réinitialiser le formulaire
         document.getElementById('register-form').reset();
+        
+        // Pré-remplir l'email sur la page de connexion
+        document.getElementById('login-email').value = userData.email;
         
         // Rediriger vers la page de connexion après 2 secondes
         setTimeout(() => {
@@ -299,8 +306,13 @@ function showLoginScreen() {
     document.getElementById('register-screen').classList.add('hidden');
     document.getElementById('app').classList.add('hidden');
     
+    // Récupérer et pré-remplir le dernier email utilisé
+    const lastEmail = localStorage.getItem('lastEmail');
+    if (lastEmail) {
+        document.getElementById('login-email').value = lastEmail;
+    }
+    
     // Réinitialiser les formulaires
-    document.getElementById('login-form').reset();
     document.getElementById('register-form').reset();
 }
 
