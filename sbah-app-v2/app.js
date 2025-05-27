@@ -1,5 +1,5 @@
 // Configuration
-const API_URL = 'https://sbah-backend.onrender.com/api/v1';
+const API_URL = 'https://sbah-family-api.onrender.com/api/v1';
 
 // Configuration Socket.IO avec options
 const socket = io(API_URL, {
