@@ -23,50 +23,41 @@ const allowedOrigins = [
     'http://localhost:5000'
 ];
 
-// Configuration CORS globale
-app.use(cors({
-    origin: function(origin, callback) {
-        // Permettre les requêtes sans origine (comme les appels API locaux)
-        if (!origin) return callback(null, true);
-        
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
-    credentials: true,
-    maxAge: 86400
-}));
+// Middleware pour gérer les en-têtes CORS manuellement
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Max-Age', '86400');
+    next();
+});
+
+// Middleware pour gérer les requêtes OPTIONS
+app.options('*', (req, res) => {
+    console.log('Requête OPTIONS reçue pour:', req.url);
+    res.status(200).end();
+});
 
 // Middleware pour parser le JSON
 app.use(express.json());
 
-// Middleware pour gérer explicitement les requêtes OPTIONS
-app.options('*', cors({
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
-    credentials: true,
-    maxAge: 86400
-}));
+// Routes API
+const authRoutes = require('./routes/auth');
+const usersRoutes = require('./routes/users');
+const transactionsRoutes = require('./routes/transactions');
+const ceremoniesRoutes = require('./routes/ceremonies');
+const paymentsRoutes = require('./routes/payments');
 
-// Routes API avec CORS spécifique pour /api/auth
-app.use('/api/auth', cors({
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
-    credentials: true,
-    maxAge: 86400
-}), require('./routes/auth'));
-
-// Autres routes API
-app.use('/api/users', require('./routes/users'));
-app.use('/api/transactions', require('./routes/transactions'));
-app.use('/api/ceremonies', require('./routes/ceremonies'));
-app.use('/api/payments', require('./routes/payments'));
+// Application des routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/transactions', transactionsRoutes);
+app.use('/api/ceremonies', ceremoniesRoutes);
+app.use('/api/payments', paymentsRoutes);
 
 // Configuration de Socket.IO
 const io = socketIO(server, {

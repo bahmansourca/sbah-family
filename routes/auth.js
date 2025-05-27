@@ -1,51 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const NotificationService = require('../services/NotificationService');
+const auth = require('../middleware/auth');
 
-const allowedOrigins = [
-    'https://sbah-family.onrender.com',
-    'https://sbah-family-frontend.onrender.com',
-    'http://localhost:3000',
-    'http://localhost:5000'
-];
-
-const corsOptions = {
-    origin: function(origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
-    credentials: true,
-    maxAge: 86400
-};
-
-// Appliquer CORS spécifiquement pour la route register
-router.options('/register', cors(corsOptions));
-
-// Inscription
-router.post('/register', cors(corsOptions), async (req, res) => {
+// Route d'inscription
+router.post('/register', async (req, res) => {
     try {
-        console.log('Tentative d\'inscription reçue:', req.body);
+        console.log('Requête d\'inscription reçue:', req.body);
         
         const { name, email, password, phone, country, city } = req.body;
 
-        // Validation des champs
-        if (!name || !email || !password || !phone || !country || !city) {
-            return res.status(400).json({
-                success: false,
-                message: 'Tous les champs sont requis'
-            });
-        }
-
-        // Vérifier si l'utilisateur existe déjà
+        // Vérification si l'utilisateur existe déjà
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({
@@ -54,7 +21,7 @@ router.post('/register', cors(corsOptions), async (req, res) => {
             });
         }
 
-        // Créer un nouvel utilisateur
+        // Création du nouvel utilisateur
         user = new User({
             name,
             email,
@@ -64,17 +31,14 @@ router.post('/register', cors(corsOptions), async (req, res) => {
             city
         });
 
-        // Hasher le mot de passe
+        // Hashage du mot de passe
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
-        // Sauvegarder l'utilisateur
+        // Sauvegarde de l'utilisateur
         await user.save();
 
-        // Notifier les administrateurs
-        await NotificationService.notifyNewUser(user);
-
-        // Créer et retourner le token JWT
+        // Création du token JWT
         const payload = {
             user: {
                 id: user.id
@@ -84,7 +48,7 @@ router.post('/register', cors(corsOptions), async (req, res) => {
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: '24h' },
+            { expiresIn: '7d' },
             (err, token) => {
                 if (err) throw err;
                 res.json({
@@ -102,24 +66,22 @@ router.post('/register', cors(corsOptions), async (req, res) => {
                 });
             }
         );
-
-        console.log('Inscription réussie pour:', email);
-    } catch (error) {
-        console.error('Erreur lors de l\'inscription:', error);
+    } catch (err) {
+        console.error('Erreur lors de l\'inscription:', err);
         res.status(500).json({
             success: false,
             message: 'Erreur lors de l\'inscription',
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+            error: err.message
         });
     }
 });
 
-// Connexion
-router.post('/login', cors(corsOptions), async (req, res) => {
+// Route de connexion
+router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Vérifier si l'utilisateur existe
+        // Vérification de l'utilisateur
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({
@@ -128,7 +90,7 @@ router.post('/login', cors(corsOptions), async (req, res) => {
             });
         }
 
-        // Vérifier le mot de passe
+        // Vérification du mot de passe
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({
@@ -137,7 +99,7 @@ router.post('/login', cors(corsOptions), async (req, res) => {
             });
         }
 
-        // Créer et retourner le token JWT
+        // Création du token JWT
         const payload = {
             user: {
                 id: user.id
@@ -147,7 +109,7 @@ router.post('/login', cors(corsOptions), async (req, res) => {
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
-            { expiresIn: '24h' },
+            { expiresIn: '7d' },
             (err, token) => {
                 if (err) throw err;
                 res.json({
@@ -165,43 +127,27 @@ router.post('/login', cors(corsOptions), async (req, res) => {
                 });
             }
         );
-    } catch (error) {
-        console.error('Erreur lors de la connexion:', error);
+    } catch (err) {
+        console.error('Erreur lors de la connexion:', err);
         res.status(500).json({
             success: false,
             message: 'Erreur lors de la connexion',
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+            error: err.message
         });
     }
 });
 
-// Vérifier le token
-router.get('/me', cors(corsOptions), async (req, res) => {
+// Route pour obtenir les informations de l'utilisateur connecté
+router.get('/me', auth, async (req, res) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1];
-        if (!token) {
-            return res.status(401).json({
-                success: false,
-                message: 'Token manquant'
-            });
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.user.id).select('-password');
-        
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'Utilisateur non trouvé'
-            });
-        }
-
+        const user = await User.findById(req.user.id).select('-password');
         res.json(user);
-    } catch (error) {
-        console.error('Erreur lors de la vérification du token:', error);
-        res.status(401).json({
+    } catch (err) {
+        console.error('Erreur lors de la récupération du profil:', err);
+        res.status(500).json({
             success: false,
-            message: 'Token invalide'
+            message: 'Erreur lors de la récupération du profil',
+            error: err.message
         });
     }
 });
