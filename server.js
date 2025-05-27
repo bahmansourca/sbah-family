@@ -19,9 +19,11 @@ app.use((req, res, next) => {
 const allowedOrigins = [
     'https://sbah-family.onrender.com',
     'https://sbah-family-frontend.onrender.com',
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'http://localhost:5000'
 ];
 
+// Configuration CORS globale
 app.use(cors({
     origin: function(origin, callback) {
         // Permettre les requêtes sans origine (comme les appels API locaux)
@@ -34,18 +36,37 @@ app.use(cors({
         }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
     credentials: true,
     maxAge: 86400
 }));
 
-// Middleware pour gérer les requêtes OPTIONS
-app.options('*', (req, res) => {
-    res.status(200).end();
-});
-
 // Middleware pour parser le JSON
 app.use(express.json());
+
+// Middleware pour gérer explicitement les requêtes OPTIONS
+app.options('*', cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+    credentials: true,
+    maxAge: 86400
+}));
+
+// Routes API avec CORS spécifique pour /api/auth
+app.use('/api/auth', cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+    credentials: true,
+    maxAge: 86400
+}), require('./routes/auth'));
+
+// Autres routes API
+app.use('/api/users', require('./routes/users'));
+app.use('/api/transactions', require('./routes/transactions'));
+app.use('/api/ceremonies', require('./routes/ceremonies'));
+app.use('/api/payments', require('./routes/payments'));
 
 // Configuration de Socket.IO
 const io = socketIO(server, {
@@ -70,13 +91,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 }).catch(err => {
     console.error('Erreur de connexion MongoDB:', err);
 });
-
-// Routes API
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/users', require('./routes/users'));
-app.use('/api/transactions', require('./routes/transactions'));
-app.use('/api/ceremonies', require('./routes/ceremonies'));
-app.use('/api/payments', require('./routes/payments'));
 
 // Gestion des connexions Socket.IO
 io.on('connection', (socket) => {

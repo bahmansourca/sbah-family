@@ -79,16 +79,22 @@ async function login(email, password) {
 async function register(userData) {
     try {
         showLoading('Création du compte...');
+        console.log('Tentative d\'inscription avec les données:', userData);
+        
         const response = await fetch(`${API_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Origin': window.location.origin
             },
             body: JSON.stringify(userData),
-            credentials: 'include'
+            credentials: 'include',
+            mode: 'cors'
         });
 
+        console.log('Réponse du serveur:', response.status, response.statusText);
+        
         const data = await response.json();
         if (!response.ok) {
             throw new Error(data.message || "Erreur lors de l'inscription");
@@ -106,7 +112,18 @@ async function register(userData) {
         
     } catch (error) {
         hideLoading();
-        handleNetworkError(error, "d'inscription");
+        console.error('Erreur détaillée:', error);
+        
+        let errorMessage = "Une erreur est survenue lors de l'inscription.";
+        if (error.message.includes('CORS')) {
+            errorMessage = "Erreur de connexion au serveur. Veuillez réessayer.";
+        } else if (error.message.includes('Failed to fetch')) {
+            errorMessage = "Impossible de contacter le serveur. Vérifiez votre connexion.";
+        } else {
+            errorMessage = error.message;
+        }
+        
+        showNotification('Erreur', errorMessage, 'error');
     }
 }
 
