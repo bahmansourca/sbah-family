@@ -10,24 +10,45 @@ const app = express();
 const server = http.createServer(app);
 
 // Configuration CORS pour Express
-const corsOptions = {
-    origin: ['https://sbah-family.onrender.com', 'https://sbah-family-frontend.onrender.com'],
+app.use(cors({
+    origin: function(origin, callback) {
+        const allowedOrigins = [
+            'https://sbah-family.onrender.com',
+            'https://sbah-family-frontend.onrender.com',
+            'http://localhost:3000'
+        ];
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
     maxAge: 86400 // 24 heures
-};
-
-app.use(cors(corsOptions));
+}));
 
 // Configuration de Socket.IO avec CORS
 const io = socketIO(server, {
     cors: {
-        origin: ['https://sbah-family.onrender.com', 'https://sbah-family-frontend.onrender.com'],
+        origin: function(origin, callback) {
+            const allowedOrigins = [
+                'https://sbah-family.onrender.com',
+                'https://sbah-family-frontend.onrender.com',
+                'http://localhost:3000'
+            ];
+            if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: ["GET", "POST"],
         allowedHeaders: ["Authorization"],
         credentials: true
-    }
+    },
+    transports: ['websocket', 'polling']
 });
 
 // Middleware
@@ -46,6 +67,12 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.error('Erreur de connexion MongoDB:', err);
 });
 
+// Middleware pour les logs
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
+
 // Routes API
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
@@ -59,8 +86,8 @@ io.on('connection', (socket) => {
 
     socket.on('authenticate', (data) => {
         if (data.token) {
-            // Ajouter le socket à une room spécifique à l'utilisateur
             socket.join(`user_${data.userId}`);
+            console.log(`User ${data.userId} authentifié`);
         }
     });
 
@@ -71,13 +98,21 @@ io.on('connection', (socket) => {
 
 // Gestion des erreurs
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Une erreur est survenue !');
+    console.error('Erreur:', err.stack);
+    res.status(500).json({
+        success: false,
+        message: 'Une erreur est survenue !',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
 });
 
 // Route de test pour vérifier que le serveur fonctionne
 app.get('/', (req, res) => {
-    res.send('API SBah Family en ligne !');
+    res.json({
+        success: true,
+        message: 'API SBah Family en ligne !',
+        version: '1.0.0'
+    });
 });
 
 const PORT = process.env.PORT || 5000;

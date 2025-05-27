@@ -8,7 +8,8 @@ const socket = io(API_URL, {
     autoConnect: false,
     reconnection: true,
     reconnectionAttempts: 5,
-    reconnectionDelay: 1000
+    reconnectionDelay: 1000,
+    timeout: 10000
 });
 
 // État de l'application
@@ -20,14 +21,28 @@ let state = {
 };
 
 // Gestion des erreurs réseau
-function handleNetworkError(error) {
-    console.error('Erreur réseau:', error);
-    alert('Erreur de connexion au serveur. Veuillez réessayer.');
+function handleNetworkError(error, action = '') {
+    console.error(`Erreur ${action}:`, error);
+    const message = error.response?.data?.message || error.message || 'Une erreur est survenue';
+    showNotification('Erreur', message, 'error');
+}
+
+// Affichage des notifications
+function showNotification(title, message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <h4>${title}</h4>
+        <p>${message}</p>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 5000);
 }
 
 // Gestion de l'authentification
 async function login(email, password) {
     try {
+        showLoading('Connexion en cours...');
         const response = await fetch(`${API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
@@ -49,21 +64,26 @@ async function login(email, password) {
         socket.auth = { token: data.token };
         socket.connect();
         
+        hideLoading();
+        showNotification('Succès', 'Connexion réussie !', 'success');
         showApp();
         loadInitialData();
     } catch (error) {
-        handleNetworkError(error);
+        hideLoading();
+        handleNetworkError(error, 'de connexion');
     }
 }
 
 async function register(userData) {
     try {
+        showLoading('Création du compte...');
         const response = await fetch(`${API_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(userData),
+            credentials: 'include'
         });
 
         const data = await response.json();
@@ -78,40 +98,33 @@ async function register(userData) {
         socket.auth = { token: data.token };
         socket.connect();
         
+        hideLoading();
+        showNotification('Succès', 'Compte créé avec succès !', 'success');
         showApp();
         loadInitialData();
     } catch (error) {
-        alert(error.message);
+        hideLoading();
+        handleNetworkError(error, "d'inscription");
     }
 }
 
-async function checkAuth() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        showLoginScreen();
-        return;
-    }
+// Affichage/masquage du loader
+function showLoading(message = 'Chargement...') {
+    const loader = document.createElement('div');
+    loader.id = 'loading-overlay';
+    loader.innerHTML = `
+        <div class="spinner-container">
+            <div class="spinner"></div>
+            <p class="loading-text">${message}</p>
+        </div>
+    `;
+    document.body.appendChild(loader);
+}
 
-    try {
-        const response = await fetch(`${API_URL}/api/auth/me`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Session expirée');
-        }
-
-        state.user = await response.json();
-        socket.auth = { token };
-        socket.connect();
-        
-        showApp();
-        loadInitialData();
-    } catch (error) {
-        localStorage.removeItem('token');
-        showLoginScreen();
+function hideLoading() {
+    const loader = document.getElementById('loading-overlay');
+    if (loader) {
+        loader.remove();
     }
 }
 
@@ -356,10 +369,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Socket.IO error handling
     socket.on('connect_error', (error) => {
         console.error('Erreur de connexion Socket.IO:', error);
+        showNotification('Erreur', 'Problème de connexion au serveur', 'error');
     });
 
     socket.on('error', (error) => {
         console.error('Erreur Socket.IO:', error);
+        showNotification('Erreur', 'Une erreur est survenue', 'error');
     });
 
     // Vérifier l'authentification au chargement
