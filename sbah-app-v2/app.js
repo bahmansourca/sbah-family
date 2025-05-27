@@ -89,23 +89,21 @@ async function register(userData) {
             credentials: 'include'
         });
 
+        const data = await response.json();
         if (!response.ok) {
-            const data = await response.json();
             throw new Error(data.message || "Erreur lors de l'inscription");
         }
 
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
-        state.user = data.user;
+        showNotification('Succès', 'Compte créé avec succès ! Vous pouvez maintenant vous connecter.', 'success');
         
-        // Connecter Socket.IO
-        socket.auth = { token: data.token };
-        socket.connect();
+        // Réinitialiser le formulaire
+        document.getElementById('register-form').reset();
         
-        hideLoading();
-        showNotification('Succès', 'Compte créé avec succès !', 'success');
-        showApp();
-        loadInitialData();
+        // Rediriger vers la page de connexion après 2 secondes
+        setTimeout(() => {
+            showLoginScreen();
+        }, 2000);
+        
     } catch (error) {
         hideLoading();
         handleNetworkError(error, "d'inscription");
@@ -279,15 +277,25 @@ function showScreen(screenId) {
 }
 
 function showLoginScreen() {
+    hideLoading();
     document.getElementById('login-screen').classList.remove('hidden');
     document.getElementById('register-screen').classList.add('hidden');
     document.getElementById('app').classList.add('hidden');
+    
+    // Réinitialiser les formulaires
+    document.getElementById('login-form').reset();
+    document.getElementById('register-form').reset();
 }
 
 function showRegisterScreen() {
+    hideLoading();
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('register-screen').classList.remove('hidden');
     document.getElementById('app').classList.add('hidden');
+    
+    // Réinitialiser les formulaires
+    document.getElementById('login-form').reset();
+    document.getElementById('register-form').reset();
 }
 
 function showApp() {
@@ -332,17 +340,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Formulaire d'inscription
-    document.getElementById('register-form').addEventListener('submit', (e) => {
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const userData = {
-            name: document.getElementById('register-name').value,
-            email: document.getElementById('register-email').value,
+            name: document.getElementById('register-name').value.trim(),
+            email: document.getElementById('register-email').value.trim(),
             password: document.getElementById('register-password').value,
-            phone: document.getElementById('register-phone').value,
+            phone: document.getElementById('register-phone').value.trim(),
             country: document.getElementById('register-country').value,
-            city: document.getElementById('register-city').value
+            city: document.getElementById('register-city').value.trim()
         };
-        register(userData);
+
+        // Validation des champs
+        if (!userData.name || !userData.email || !userData.password || !userData.phone || !userData.country || !userData.city) {
+            showNotification('Erreur', 'Veuillez remplir tous les champs', 'error');
+            return;
+        }
+
+        // Validation de l'email
+        if (!userData.email.includes('@')) {
+            showNotification('Erreur', 'Veuillez entrer une adresse email valide', 'error');
+            return;
+        }
+
+        // Validation du mot de passe
+        if (userData.password.length < 6) {
+            showNotification('Erreur', 'Le mot de passe doit contenir au moins 6 caractères', 'error');
+            return;
+        }
+
+        await register(userData);
     });
 
     // Navigation

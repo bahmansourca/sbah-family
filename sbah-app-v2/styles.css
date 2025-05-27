@@ -148,15 +148,15 @@ h2 {
 }
 
 .form-group {
-    width: 100%;
-    margin-bottom: 20px;
+    position: relative;
+    margin-bottom: 1.5rem;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
     font-weight: 500;
-    color: white;
 }
 
 .login-container .form-group label,
@@ -164,28 +164,38 @@ h2 {
     color: rgba(255, 255, 255, 0.9);
 }
 
-.form-group input, .form-group select, .form-group textarea {
+.form-group input,
+.form-group select {
     width: 100%;
-    padding: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    font-size: 16px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 1rem;
     transition: all 0.3s ease;
+    background-color: white;
+    color: var(--text-color);
 }
 
-.form-group input::placeholder, 
-.form-group textarea::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+.form-group input::placeholder,
+.form-group select::placeholder {
+    color: var(--light-text);
+    opacity: 0.7;
 }
 
-.form-group input:focus, 
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(44, 80, 168, 0.1);
     outline: none;
-    border-color: var(--secondary-color);
-    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-group i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    font-size: 1.2rem;
 }
 
 .primary-btn {
@@ -977,36 +987,12 @@ h2 {
 }
 
 .auth-form {
-    width: 100%;
-    max-width: 400px;
     background: white;
     padding: 2rem;
     border-radius: 1rem;
-    box-shadow: var(--box-shadow);
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-    position: relative;
-}
-
-.form-group input,
-.form-group select {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
-    padding: 1rem;
-    padding-left: 3rem;
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.form-group i {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--light-text);
+    max-width: 400px;
 }
 
 .btn-primary {
@@ -1027,14 +1013,23 @@ h2 {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+.btn-primary:active {
+    transform: translateY(0);
+}
+
 .auth-switch {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     text-align: center;
-    color: var(--light-text);
+    color: white;
 }
 
 .auth-switch a {
-    color: var(--primary-color);
+    color: white;
     text-decoration: none;
     font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
 }
