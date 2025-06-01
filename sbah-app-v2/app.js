@@ -47,6 +47,11 @@ function initializeServices() {
     
     // Initialisation du gestionnaire de paiement
     paymentHandler.initialize();
+
+    // Initialisation des services supplémentaires
+    const authService = new AuthService();
+    const uiService = new UIService();
+    const avatarService = new AvatarService();
 }
 
 // Initialisation des écouteurs d'événements
@@ -228,21 +233,7 @@ function updateUpcomingEvents(events) {
 // Mise à jour de la liste des membres
 function updateMembersList(members) {
     const container = document.getElementById('members-list');
-    container.innerHTML = members.map(member => `
-        <div class="member-item">
-            <div class="member-avatar">
-                <i class="fas fa-${uiService.getAvatarIcon(member.role)}"></i>
-            </div>
-            <div class="member-info">
-                <h4>${member.name}</h4>
-                <p>${member.role}</p>
-                <small>${member.city}, ${member.country}</small>
-            </div>
-            <div class="member-status">
-                ${uiService.createBadge(member.status)}
-            </div>
-        </div>
-    `).join('');
+    container.innerHTML = members.map(member => renderMember(member)).join('');
 }
 
 // Mise à jour de la liste des transactions
@@ -349,4 +340,106 @@ function handleChangePassword() {
 function handleLogout() {
     authService.logout();
     window.location.href = 'auth.html';
+}
+
+// Mise à jour de la fonction renderMember
+function renderMember(member) {
+    const memberElement = document.createElement('div');
+    memberElement.className = 'member-item';
+    
+    const avatar = avatarService.generateAvatar(member.name);
+    const statusClass = member.isUpToDate ? 'badge-success' : 'badge-warning';
+    const statusText = member.isUpToDate ? 'À jour' : 'En retard';
+    
+    memberElement.innerHTML = `
+        <div class="member-avatar">
+            ${avatar}
+        </div>
+        <div class="member-info">
+            <h4>${member.name}</h4>
+            <p>${member.role}</p>
+            <small>${member.location}</small>
+        </div>
+        <div class="member-status">
+            <span class="badge ${statusClass}">${statusText}</span>
+        </div>
+    `;
+    
+    return memberElement;
+}
+
+// Mise à jour de la fonction renderEvent
+function renderEvent(event) {
+    const eventElement = document.createElement('div');
+    eventElement.className = 'event-item';
+    
+    const illustration = avatarService.generateEventIllustration(event.type);
+    const statusClass = event.status === 'upcoming' ? 'badge-warning' : 'badge-success';
+    const statusText = event.status === 'upcoming' ? 'À venir' : 'Terminé';
+    
+    eventElement.innerHTML = `
+        ${illustration}
+        <div class="event-info">
+            <h4>${event.title}</h4>
+            <p>${event.date}</p>
+            <small>Montant demandé : ${formatAmount(event.amount)}</small>
+        </div>
+        <div class="event-amount">
+            <span class="badge ${statusClass}">${statusText}</span>
+        </div>
+    `;
+    
+    return eventElement;
+}
+
+// Mise à jour de la fonction renderPaymentMethod
+function renderPaymentMethod(method) {
+    const methodElement = document.createElement('div');
+    methodElement.className = 'payment-method';
+    methodElement.dataset.method = method.id;
+    
+    const illustration = avatarService.generatePaymentIllustration(method.id);
+    
+    methodElement.innerHTML = `
+        ${illustration}
+        <div class="payment-info">
+            <h5>${method.name}</h5>
+            <p>${method.description}</p>
+        </div>
+    `;
+    
+    return methodElement;
+}
+
+// Mise à jour de la fonction renderNotification
+function renderNotification(notification) {
+    const notificationElement = document.createElement('div');
+    notificationElement.className = 'notification-item';
+    
+    const illustration = avatarService.generateNotificationIllustration(notification.type);
+    
+    notificationElement.innerHTML = `
+        ${illustration}
+        <div class="notification-content">
+            <h4>${notification.title}</h4>
+            <p>${notification.message}</p>
+            <small>${notification.time}</small>
+        </div>
+    `;
+    
+    return notificationElement;
+}
+
+// Mise à jour de la fonction updateBalanceCard
+function updateBalanceCard(balance) {
+    const balanceCard = document.querySelector('.balance-card');
+    const illustration = avatarService.generateBalanceIllustration();
+    
+    balanceCard.innerHTML = `
+        <div style="max-width:220px;margin:0 auto 1.5rem auto;">
+            ${illustration}
+        </div>
+        <p>Solde total de la cagnotte</p>
+        <h2 class="balance-amount">${formatAmount(balance)}</h2>
+    `;
 } 
