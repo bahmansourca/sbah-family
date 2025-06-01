@@ -1,0 +1,436 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
+
+[dev]
+  command = "npm run dev"
+  port = 8888
+  targetPort = 3000
+  publish = "dist"
+  autoLaunch = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+    [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; font-src 'self' https: data:;"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+[functions]
+  directory = "functions"
+  node_bundler = "esbuild"
+
+[functions.environment]
+  PAYDUNYA_MODE = "live"
+  PAYDUNYA_PUBLIC_KEY = ""
+  PAYDUNYA_PRIVATE_KEY = ""
+  PAYDUNYA_TOKEN = ""
+  PAYDUNYA_MODE = "live"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+[plugins.inputs]
+  threshold = 0.8
+
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+
+[plugins.inputs]
+  changeFreq = "weekly"
+  exclude = ["/admin/*", "/private/*"]
+  pretty = true
+  priority = 0.5
+
+[[plugins]]
+  package = "@netlify/plugin-cache-killer"
+
+[[plugins]]
+  package = "@netlify/plugin-gatsby"
+
+[plugins.inputs]
+  gatsbyRoot = "."
+  gatsbyConfig = "gatsby-config.js"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[plugins.inputs]
+  nextConfigDir = "."
+
+[[plugins]]
+  package = "@netlify/plugin-functions-core"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-utils"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-validate"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-build"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-deploy"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-serve"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-dev"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-test"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-docs"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-examples"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-templates"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-community"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-marketplace"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-support"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-feedback"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-bugs"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-features"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-roadmap"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-status"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-uptime"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-metrics"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-logs"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-alerts"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-monitoring"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-analytics"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-reporting"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-dashboard"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-cli"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-api"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-sdk"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-docs"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-examples"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-templates"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-community"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-marketplace"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-support"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-feedback"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-bugs"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-features"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-roadmap"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-status"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-uptime"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-metrics"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-logs"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-alerts"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-monitoring"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-analytics"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-reporting"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-dashboard"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-cli"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-api"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js"
+
+[[plugins]]
+  package = "@netlify/plugin-functions-sdk"
+
+[plugins.inputs]
+  functionsDirectory = "functions"
+  functionsPattern = "**/*.js" 

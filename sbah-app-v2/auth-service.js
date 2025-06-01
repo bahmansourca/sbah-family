@@ -1,125 +1,154 @@
 // Service d'authentification
-const AuthService = {
-    currentUser: null,
-
-    init() {
-        // Vérifier s'il y a un utilisateur en session
-        const userJson = localStorage.getItem('sbahFamilyUser');
-        if (userJson) {
-            this.currentUser = JSON.parse(userJson);
-            return true;
-        }
-        return false;
-    },
+class AuthService {
+    constructor() {
+        this.currentUser = null;
+        this.isAuthenticated = false;
+        this.token = localStorage.getItem('token');
+    }
 
     async login(email, password) {
         try {
-            // Récupérer les utilisateurs
-            const users = JSON.parse(localStorage.getItem('sbahFamilyUsers') || '[]');
-            
-            // Rechercher l'utilisateur
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                this.currentUser = user;
-                localStorage.setItem('sbahFamilyUser', JSON.stringify(user));
-                return { success: true, user };
-            } else {
-                return { success: false, error: 'Email ou mot de passe incorrect' };
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de la connexion');
             }
+
+            const data = await response.json();
+            this.setAuthData(data);
+            return data;
         } catch (error) {
-            console.error('Erreur lors de la connexion:', error);
-            return { success: false, error: 'Une erreur est survenue lors de la connexion' };
+            console.error('Erreur de connexion:', error);
+            throw error;
         }
-    },
+    }
 
     async register(userData) {
         try {
-            // Récupérer les utilisateurs existants
-            const users = JSON.parse(localStorage.getItem('sbahFamilyUsers') || '[]');
-            
-            // Vérifier si l'email existe déjà
-            if (users.some(u => u.email === userData.email)) {
-                return { success: false, error: 'Cet email est déjà utilisé' };
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de l\'inscription');
             }
-            
-            // Créer le nouvel utilisateur
-            const newUser = {
-                id: 'user_' + Date.now(),
-                name: userData.name,
-                email: userData.email,
-                phone: userData.phone,
-                country: userData.country,
-                city: userData.city,
-                password: userData.password,
-                role: users.length === 0 ? 'admin' : 'member', // Premier utilisateur = admin
-                createdAt: new Date().toISOString()
-            };
-            
-            // Ajouter l'utilisateur
-            users.push(newUser);
-            localStorage.setItem('sbahFamilyUsers', JSON.stringify(users));
-            
-            // Connecter l'utilisateur
-            this.currentUser = newUser;
-            localStorage.setItem('sbahFamilyUser', JSON.stringify(newUser));
-            
-            return { success: true, user: newUser };
+
+            const data = await response.json();
+            this.setAuthData(data);
+            return data;
         } catch (error) {
-            console.error('Erreur lors de l\'inscription:', error);
-            return { success: false, error: 'Une erreur est survenue lors de l\'inscription' };
+            console.error('Erreur d\'inscription:', error);
+            throw error;
         }
-    },
+    }
 
-    logout() {
+    async logout() {
+        try {
+            await fetch('/api/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
+            });
+        } catch (error) {
+            console.error('Erreur de déconnexion:', error);
+        } finally {
+            this.clearAuthData();
+        }
+    }
+
+    async changePassword(currentPassword, newPassword) {
+        try {
+            const response = await fetch('/api/auth/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                },
+                body: JSON.stringify({ currentPassword, newPassword })
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec du changement de mot de passe');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur de changement de mot de passe:', error);
+            throw error;
+        }
+    }
+
+    async updateProfile(profileData) {
+        try {
+            const response = await fetch('/api/auth/profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                },
+                body: JSON.stringify(profileData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de la mise à jour du profil');
+            }
+
+            const data = await response.json();
+            this.currentUser = data;
+            return data;
+        } catch (error) {
+            console.error('Erreur de mise à jour du profil:', error);
+            throw error;
+        }
+    }
+
+    setAuthData(data) {
+        this.token = data.token;
+        this.currentUser = data.user;
+        this.isAuthenticated = true;
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+    }
+
+    clearAuthData() {
+        this.token = null;
         this.currentUser = null;
-        localStorage.removeItem('sbahFamilyUser');
-        return true;
-    },
+        this.isAuthenticated = false;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+    }
 
-    isAuthenticated() {
-        return this.currentUser !== null;
-    },
+    getCurrentUser() {
+        if (!this.currentUser) {
+            const userData = localStorage.getItem('user');
+            if (userData) {
+                this.currentUser = JSON.parse(userData);
+                this.isAuthenticated = true;
+            }
+        }
+        return this.currentUser;
+    }
 
     isAdmin() {
         return this.currentUser?.role === 'admin';
-    },
-
-    getCurrentUser() {
-        return this.currentUser;
-    },
-
-    updateUser(userData) {
-        try {
-            // Mettre à jour l'utilisateur dans la liste
-            const users = JSON.parse(localStorage.getItem('sbahFamilyUsers') || '[]');
-            const index = users.findIndex(u => u.id === this.currentUser.id);
-            
-            if (index >= 0) {
-                // Mettre à jour les champs modifiables
-                users[index] = {
-                    ...users[index],
-                    name: userData.name,
-                    phone: userData.phone,
-                    country: userData.country,
-                    city: userData.city,
-                    updatedAt: new Date().toISOString()
-                };
-                
-                // Sauvegarder les modifications
-                localStorage.setItem('sbahFamilyUsers', JSON.stringify(users));
-                
-                // Mettre à jour l'utilisateur courant
-                this.currentUser = users[index];
-                localStorage.setItem('sbahFamilyUser', JSON.stringify(users[index]));
-                
-                return { success: true, user: users[index] };
-            }
-            
-            return { success: false, error: 'Utilisateur non trouvé' };
-        } catch (error) {
-            console.error('Erreur lors de la mise à jour du profil:', error);
-            return { success: false, error: 'Une erreur est survenue lors de la mise à jour du profil' };
-        }
     }
-}; 
+
+    checkAuth() {
+        return this.token && this.isAuthenticated;
+    }
+}
+
+// Export du service
+const authService = new AuthService();
+export default authService; 

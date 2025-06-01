@@ -4,155 +4,358 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Application de gestion financière pour la famille SBah - Paiements mensuels et cérémonies familiales">
-    <meta name="theme-color" content="#2c50a8">
-    <title>SBah Family</title>
+    <meta name="theme-color" content="#2563eb">
+    <title>SBah Family - Cagnotte Familiale</title>
+    
+    <!-- Polices -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Styles -->
-    <link rel="stylesheet" href="auth-styles.css">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div id="app">
         <!-- En-tête -->
         <header class="app-header">
-            <div class="logo">
-                <img src="images/logo.png" alt="SBah Family Logo">
+            <div class="header-left">
                 <h1>SBah Family</h1>
             </div>
-            <div class="balance">
-                <span>Solde:</span>
-                <span class="balance-amount">0 GNF</span>
+            <div class="header-right">
+                <div class="notification-icon" id="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-count">0</span>
+                </div>
+                <div class="profile-icon" id="profile-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
             </div>
         </header>
 
+        <!-- Contenu principal -->
+        <main>
+            <!-- Écran d'accueil -->
+            <div class="screen active" id="home-screen">
+                <!-- Carte de solde -->
+                <div class="balance-card">
+                    <p>Solde total de la cagnotte</p>
+                    <h2 class="balance-amount" id="total-balance">0 GNF</h2>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="action-buttons">
+                    <button class="action-btn" id="pay-btn">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Payer</span>
+                    </button>
+                    <button class="action-btn" id="events-btn">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Événements</span>
+                    </button>
+                    <button class="action-btn" id="members-btn">
+                        <i class="fas fa-users"></i>
+                        <span>Membres</span>
+                    </button>
+                    <button class="action-btn" id="history-btn">
+                        <i class="fas fa-history"></i>
+                        <span>Historique</span>
+                    </button>
+                </div>
+
+                <!-- Dépôts récents -->
+                <div class="section">
+                    <div class="section-header">
+                        <h3>Dépôts récents</h3>
+                        <a href="#" id="view-all-deposits">Voir tout</a>
+                    </div>
+                    <div class="payments-list" id="recent-deposits"></div>
+                </div>
+
+                <!-- Événements à venir -->
+                <div class="section">
+                    <div class="section-header">
+                        <h3>Événements à venir</h3>
+                        <a href="#" id="view-all-events">Voir tout</a>
+                    </div>
+                    <div class="events-list" id="upcoming-events"></div>
+                </div>
+            </div>
+
+            <!-- Écran de paiement -->
+            <div class="screen" id="payment-screen">
+                <div class="screen-header">
+                    <button class="back-btn" id="payment-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Effectuer un paiement</h2>
+                </div>
+
+                <div class="form-container">
+                    <!-- Options de montant -->
+                    <div class="amount-options">
+                        <button class="amount-option active" data-amount="300000">1 mois (300.000 GNF)</button>
+                        <button class="amount-option" data-amount="900000">3 mois (900.000 GNF)</button>
+                        <button class="amount-option" data-amount="1800000">6 mois (1.800.000 GNF)</button>
+                        <button class="amount-option" data-amount="3600000">12 mois (3.600.000 GNF)</button>
+                        <button class="amount-option" data-amount="custom">Montant personnalisé</button>
+                    </div>
+
+                    <!-- Montant personnalisé -->
+                    <div class="custom-amount-group hidden">
+                        <div class="form-group">
+                            <label for="deposit-amount">Montant en GNF</label>
+                            <input type="number" id="deposit-amount" class="form-control" min="300000" step="1000">
+                        </div>
+                    </div>
+
+                    <!-- Méthodes de paiement -->
+                    <div class="payment-methods">
+                        <h4>Choisir une méthode de paiement</h4>
+                        <div class="payment-method" data-method="orange-money">
+                            <div class="payment-icon orange">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="payment-info">
+                                <h5>Orange Money</h5>
+                                <p>Payer avec Orange Money</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="visa">
+                            <div class="payment-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="payment-info">
+                                <h5>Carte bancaire</h5>
+                                <p>Payer avec une carte Visa/Mastercard</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="cash">
+                            <div class="payment-icon">
+                                <i class="fas fa-money-bill"></i>
+                            </div>
+                            <div class="payment-info">
+                                <h5>Espèces</h5>
+                                <p>Paiement en espèces (admin uniquement)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informations paiement cash -->
+                    <div id="cash-payment-info" class="hidden">
+                        <div class="form-group">
+                            <label for="cash-user">Membre qui a payé</label>
+                            <select id="cash-user" class="form-control">
+                                <option value="">Sélectionner un membre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cash-receipt">Numéro de reçu (optionnel)</label>
+                            <input type="text" id="cash-receipt" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Bouton de paiement -->
+                    <button id="submit-deposit-btn" class="submit-button">
+                        Payer maintenant
+                    </button>
+                </div>
+            </div>
+
+            <!-- Écran des événements -->
+            <div class="screen" id="events-screen">
+                <div class="screen-header">
+                    <button class="back-btn" id="events-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Événements familiaux</h2>
+                </div>
+
+                <!-- Liste des événements -->
+                <div class="events-list" id="events-list"></div>
+
+                <!-- Bouton d'ajout d'événement -->
+                <button id="add-event-btn" class="floating-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- Écran des membres -->
+            <div class="screen" id="members-screen">
+                <div class="screen-header">
+                    <button class="back-btn" id="members-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Membres de la famille</h2>
+                </div>
+
+                <!-- Liste des membres -->
+                <div class="family-members-container" id="members-list"></div>
+            </div>
+
+            <!-- Écran d'historique -->
+            <div class="screen" id="history-screen">
+                <div class="screen-header">
+                    <button class="back-btn" id="history-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Historique des transactions</h2>
+                </div>
+
+                <!-- Filtres -->
+                <div class="filters">
+                    <select id="history-filter" class="form-control">
+                        <option value="all">Toutes les transactions</option>
+                        <option value="deposits">Dépôts uniquement</option>
+                        <option value="withdrawals">Retraits uniquement</option>
+                    </select>
+                </div>
+
+                <!-- Liste des transactions -->
+                <div class="transactions-list" id="transactions-list"></div>
+            </div>
+
+            <!-- Écran de profil -->
+            <div class="screen" id="profile-screen">
+                <div class="screen-header">
+                    <button class="back-btn" id="profile-back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Mon profil</h2>
+                </div>
+
+                <!-- Informations du profil -->
+                <div class="profile-section">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3 class="profile-name" id="profile-name"></h3>
+                    <p class="profile-status" id="payment-status"></p>
+                </div>
+
+                <div class="profile-info">
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <p class="info-label">Email</p>
+                            <p class="info-value" id="profile-email"></p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <p class="info-label">Téléphone</p>
+                            <p class="info-value" id="profile-phone"></p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <p class="info-label">Pays</p>
+                            <p class="info-value" id="profile-country"></p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-city"></i>
+                        <div>
+                            <p class="info-label">Ville</p>
+                            <p class="info-value" id="profile-city"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="profile-action-btn" id="edit-profile-btn">
+                        <i class="fas fa-edit"></i>
+                        Modifier mon profil
+                    </button>
+                    <button class="profile-action-btn" id="change-password-btn">
+                        <i class="fas fa-key"></i>
+                        Changer mon mot de passe
+                    </button>
+                    <button class="profile-action-btn logout" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Se déconnecter
+                    </button>
+                </div>
+            </div>
+        </main>
+
         <!-- Navigation -->
-        <nav class="app-nav">
-            <button id="nav-home" class="nav-item active">
+        <nav class="navigation">
+            <div class="nav-item active" data-screen="home">
                 <i class="fas fa-home"></i>
-                Accueil
-            </button>
-            <button id="nav-members" class="nav-item">
-                <i class="fas fa-users"></i>
-                Membres
-            </button>
-            <button id="nav-transactions" class="nav-item">
-                <i class="fas fa-exchange-alt"></i>
-                Transactions
-            </button>
-            <button id="nav-ceremonies" class="nav-item">
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item" data-screen="payment">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Payer</span>
+            </div>
+            <div class="nav-item" data-screen="events">
                 <i class="fas fa-calendar-alt"></i>
-                Cérémonies
-            </button>
+                <span>Événements</span>
+            </div>
+            <div class="nav-item" data-screen="profile">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
+            </div>
         </nav>
 
-        <!-- Écran d'accueil -->
-        <div id="home-screen" class="screen">
-            <div class="welcome-section">
-                <h2>Bienvenue dans SBah Family</h2>
-                <p>Gérez votre famille en toute simplicité</p>
-            </div>
-            
-            <div class="quick-actions">
-                <button onclick="showScreen('members-screen')" class="action-button">
-                    <i class="fas fa-user-plus"></i>
-                    Ajouter un membre
-                </button>
-                <button onclick="showScreen('transactions-screen')" class="action-button">
-                    <i class="fas fa-money-bill-wave"></i>
-                    Nouvelle transaction
-                </button>
-                <button onclick="showScreen('ceremonies-screen')" class="action-button">
-                    <i class="fas fa-calendar-plus"></i>
-                    Nouvelle cérémonie
-                </button>
-            </div>
-        </div>
-
-        <!-- Écran des membres -->
-        <div id="members-screen" class="screen hidden">
-            <div class="screen-header">
-                <h2>Gestion des membres</h2>
-                <button onclick="showAddMemberForm()" class="add-button">
-                    <i class="fas fa-plus"></i>
-                    Ajouter un membre
-                </button>
-            </div>
-
-            <!-- Formulaire d'ajout de membre -->
-            <div id="add-member-form-container" class="form-container hidden">
-                <form id="add-member-form" class="form">
-                    <div class="form-group">
-                        <label for="member-name">Nom complet</label>
-                        <input type="text" id="member-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="member-role">Rôle dans la famille</label>
-                        <input type="text" id="member-role" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="member-phone">Téléphone</label>
-                        <input type="tel" id="member-phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="member-country">Pays</label>
-                        <select id="member-country" required>
-                            <option value="Guinée">Guinée</option>
-                            <option value="France">France</option>
-                            <option value="États-Unis">États-Unis</option>
-                            <option value="Canada">Canada</option>
-                            <option value="Autre">Autre</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="member-city">Ville</label>
-                        <input type="text" id="member-city" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="submit-button">Ajouter</button>
-                        <button type="button" onclick="hideAddMemberForm()" class="cancel-button">Annuler</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Liste des membres -->
-            <div class="family-members-container">
-                <!-- Les membres seront ajoutés ici dynamiquement -->
-            </div>
-        </div>
-
-        <!-- Écran des transactions -->
-        <div id="transactions-screen" class="screen hidden">
-            <div class="screen-header">
-                <h2>Transactions récentes</h2>
-                <button onclick="showAddTransactionForm()" class="add-button">
-                    <i class="fas fa-plus"></i>
-                    Nouvelle transaction
-                </button>
-            </div>
-            <div class="deposits-container">
-                <!-- Les transactions seront ajoutées ici dynamiquement -->
-            </div>
-        </div>
-
-        <!-- Écran des cérémonies -->
-        <div id="ceremonies-screen" class="screen hidden">
-            <div class="screen-header">
-                <h2>Cérémonies à venir</h2>
-                <button onclick="showAddCeremonyForm()" class="add-button">
-                    <i class="fas fa-plus"></i>
-                    Nouvelle cérémonie
-                </button>
-            </div>
-            <div class="ceremonies-container">
-                <!-- Les cérémonies seront ajoutées ici dynamiquement -->
+        <!-- Modales -->
+        <div class="modal hidden" id="add-event-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Nouvel événement</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-event-form">
+                        <div class="form-group">
+                            <label for="event-type">Type d'événement</label>
+                            <select id="event-type" class="form-control" required>
+                                <option value="marriage">Mariage</option>
+                                <option value="funeral">Funérailles</option>
+                                <option value="sacrifice">Sacrifice</option>
+                                <option value="baptism">Baptême</option>
+                                <option value="meeting">Réunion</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-title">Titre</label>
+                            <input type="text" id="event-title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-description">Description</label>
+                            <textarea id="event-description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-date">Date</label>
+                            <input type="datetime-local" id="event-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-amount">Montant demandé (optionnel)</label>
+                            <input type="number" id="event-amount" class="form-control" min="0">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="submit-button">Créer l'événement</button>
+                            <button type="button" class="cancel-button" id="cancel-event-btn">Annuler</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
-    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.min.js"></script>
+    <script src="auth-service.js"></script>
+    <script src="sync-service.js"></script>
+    <script src="payment-handler.js"></script>
+    <script src="ui-service.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

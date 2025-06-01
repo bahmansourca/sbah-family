@@ -13,6 +13,20 @@ class SyncService {
         localStorage.setItem('sbahFamilyClientId', this.clientId);
         
         console.log(`Service de synchronisation initialisé: ${this.clientId}`);
+
+        this.socket = null;
+        this.isConnected = false;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.listeners = new Map();
+
+        this.callbacks = {
+            balance: [],
+            deposits: [],
+            events: [],
+            members: [],
+            transactions: []
+        };
     }
     
     // Générer un ID client unique
@@ -195,6 +209,433 @@ class SyncService {
             data,
             timestamp: new Date().toISOString()
         });
+    }
+
+    connect() {
+        if (this.socket) {
+            return;
+        }
+
+        this.socket = io(process.env.SOCKET_URL || 'http://localhost:3000', {
+            reconnection: true,
+            reconnectionAttempts: this.maxReconnectAttempts,
+            reconnectionDelay: 1000
+        });
+
+        this.setupSocketListeners();
+    }
+
+    setupSocketListeners() {
+        this.socket.on('connect', () => {
+            console.log('Connecté au serveur');
+            this.isConnected = true;
+            this.reconnectAttempts = 0;
+            this.emit('connectionStatus', { status: 'connected' });
+        });
+
+        this.socket.on('disconnect', () => {
+            console.log('Déconnecté du serveur');
+            this.isConnected = false;
+            this.emit('connectionStatus', { status: 'disconnected' });
+        });
+
+        this.socket.on('error', (error) => {
+            console.error('Erreur de connexion:', error);
+            this.emit('error', error);
+        });
+
+        this.socket.on('reconnect_attempt', (attemptNumber) => {
+            console.log(`Tentative de reconnexion ${attemptNumber}/${this.maxReconnectAttempts}`);
+            this.reconnectAttempts = attemptNumber;
+            this.emit('reconnectAttempt', { attempt: attemptNumber });
+        });
+
+        // Événements spécifiques
+        this.socket.on('payment:new', (data) => {
+            this.emit('payment:new', data);
+        });
+
+        this.socket.on('payment:update', (data) => {
+            this.emit('payment:update', data);
+        });
+
+        this.socket.on('event:new', (data) => {
+            this.emit('event:new', data);
+        });
+
+        this.socket.on('event:update', (data) => {
+            this.emit('event:update', data);
+        });
+
+        this.socket.on('member:new', (data) => {
+            this.emit('member:new', data);
+        });
+
+        this.socket.on('member:update', (data) => {
+            this.emit('member:update', data);
+        });
+
+        this.socket.on('notification:new', (data) => {
+            this.emit('notification:new', data);
+        });
+
+        this.socket.on('balance_update', (newBalance) => {
+            this.notifyCallbacks('balance', newBalance);
+        });
+
+        this.socket.on('deposit_update', (deposit) => {
+            this.notifyCallbacks('deposits', deposit);
+        });
+
+        this.socket.on('event_update', (event) => {
+            this.notifyCallbacks('events', event);
+        });
+
+        this.socket.on('member_update', (member) => {
+            this.notifyCallbacks('members', member);
+        });
+
+        this.socket.on('transaction_update', (transaction) => {
+            this.notifyCallbacks('transactions', transaction);
+        });
+    }
+
+    subscribe(event, callback) {
+        if (!this.listeners.has(event)) {
+            this.listeners.set(event, new Set());
+        }
+        this.listeners.get(event).add(callback);
+    }
+
+    unsubscribe(event, callback) {
+        if (this.listeners.has(event)) {
+            this.listeners.get(event).delete(callback);
+        }
+    }
+
+    emit(event, data) {
+        if (this.listeners.has(event)) {
+            this.listeners.get(event).forEach(callback => {
+                try {
+                    callback(data);
+                } catch (error) {
+                    console.error(`Erreur dans le callback pour l'événement ${event}:`, error);
+                }
+            });
+        }
+    }
+
+    // Méthodes de synchronisation
+    async syncPayments() {
+        try {
+            const response = await fetch('/api/payments/sync', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de la synchronisation des paiements');
+            }
+
+            const data = await response.json();
+            this.emit('payments:synced', data);
+            return data;
+        } catch (error) {
+            console.error('Erreur de synchronisation des paiements:', error);
+            throw error;
+        }
+    }
+
+    async syncEvents() {
+        try {
+            const response = await fetch('/api/events/sync', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de la synchronisation des événements');
+            }
+
+            const data = await response.json();
+            this.emit('events:synced', data);
+            return data;
+        } catch (error) {
+            console.error('Erreur de synchronisation des événements:', error);
+            throw error;
+        }
+    }
+
+    async syncMembers() {
+        try {
+            const response = await fetch('/api/members/sync', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Échec de la synchronisation des membres');
+            }
+
+            const data = await response.json();
+            this.emit('members:synced', data);
+            return data;
+        } catch (error) {
+            console.error('Erreur de synchronisation des membres:', error);
+            throw error;
+        }
+    }
+
+    // Méthodes de temps réel
+    sendPayment(paymentData) {
+        if (!this.isConnected) {
+            throw new Error('Non connecté au serveur');
+        }
+        this.socket.emit('payment:send', paymentData);
+    }
+
+    sendEvent(eventData) {
+        if (!this.isConnected) {
+            throw new Error('Non connecté au serveur');
+        }
+        this.socket.emit('event:send', eventData);
+    }
+
+    sendMember(memberData) {
+        if (!this.isConnected) {
+            throw new Error('Non connecté au serveur');
+        }
+        this.socket.emit('member:send', memberData);
+    }
+
+    sendNotification(notificationData) {
+        if (!this.isConnected) {
+            throw new Error('Non connecté au serveur');
+        }
+        this.socket.emit('notification:send', notificationData);
+    }
+
+    disconnect() {
+        if (this.socket) {
+            this.socket.disconnect();
+            this.socket = null;
+            this.isConnected = false;
+        }
+    }
+
+    // Enregistrement des callbacks
+    onBalanceUpdate(callback) {
+        this.callbacks.balance.push(callback);
+    }
+
+    onDepositUpdate(callback) {
+        this.callbacks.deposits.push(callback);
+    }
+
+    onEventUpdate(callback) {
+        this.callbacks.events.push(callback);
+    }
+
+    onMemberUpdate(callback) {
+        this.callbacks.members.push(callback);
+    }
+
+    onTransactionUpdate(callback) {
+        this.callbacks.transactions.push(callback);
+    }
+
+    // Notification des callbacks
+    notifyCallbacks(type, data) {
+        this.callbacks[type].forEach(callback => callback(data));
+    }
+
+    // Méthodes de récupération des données
+    async getBalance() {
+        try {
+            const response = await fetch(`${process.env.API_URL}/balance`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération du solde');
+            }
+
+            const data = await response.json();
+            return data.balance;
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+    async getRecentDeposits() {
+        try {
+            const response = await fetch(`${process.env.API_URL}/deposits/recent`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des dépôts récents');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+    async getUpcomingEvents() {
+        try {
+            const response = await fetch(`${process.env.API_URL}/events/upcoming`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des événements à venir');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+    async getMembers() {
+        try {
+            const response = await fetch(`${process.env.API_URL}/members`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des membres');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+    async getTransactions(filter = 'all') {
+        try {
+            const response = await fetch(`${process.env.API_URL}/transactions?filter=${filter}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des transactions');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+    async getProfile() {
+        try {
+            const response = await fetch(`${process.env.API_URL}/profile`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération du profil');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+    // Méthodes de création/modification
+    async createEvent(eventData) {
+        try {
+            const response = await fetch(`${process.env.API_URL}/events`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(eventData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la création de l\'événement');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+    async updateProfile(profileData) {
+        try {
+            const response = await fetch(`${process.env.API_URL}/profile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(profileData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la mise à jour du profil');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+    async changePassword(passwordData) {
+        try {
+            const response = await fetch(`${process.env.API_URL}/profile/password`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(passwordData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors du changement de mot de passe');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
     }
 }
 

@@ -240,3 +240,262 @@ function getWebhookUrl() {
     // ou configurer ngrok pour les tests
     return "https://serene-daffodil-eae953.netlify.app/.netlify/functions/paydunya-webhook";
 }
+
+// Gestionnaire de paiement
+class PaymentHandler {
+    constructor() {
+        this.paydunya = null;
+    }
+
+    // Initialisation
+    initialize() {
+        this.initializePayDunya();
+    }
+
+    // Initialisation de PayDunya
+    initializePayDunya() {
+        this.paydunya = new PayDunya({
+            mode: CONFIG.PAYDUNYA_MODE, // 'test' ou 'live'
+            store: {
+                name: CONFIG.PAYDUNYA_STORE_NAME,
+                tagline: CONFIG.PAYDUNYA_STORE_TAGLINE,
+                phone_number: CONFIG.PAYDUNYA_STORE_PHONE,
+                postal_address: CONFIG.PAYDUNYA_STORE_ADDRESS,
+                logo_url: CONFIG.PAYDUNYA_STORE_LOGO,
+                website_url: CONFIG.PAYDUNYA_STORE_WEBSITE
+            }
+        });
+    }
+
+    // Traitement des paiements en ligne
+    async processOnlinePayment(amount, method) {
+        try {
+            // Création de la commande
+            const order = await this.createOrder(amount, method);
+
+            // Traitement selon la méthode de paiement
+            switch (method) {
+                case 'orange-money':
+                    await this.processOrangeMoneyPayment(order);
+                    break;
+                case 'visa':
+                    await this.processCardPayment(order);
+                    break;
+                default:
+                    throw new Error('Méthode de paiement non supportée');
+            }
+
+            return order;
+        } catch (error) {
+            console.error('Erreur lors du paiement en ligne:', error);
+            throw error;
+        }
+    }
+
+    // Traitement des paiements en espèces
+    async processCashPayment(amount, userId, receipt = null) {
+        try {
+            // Vérification des droits d'administration
+            if (!authService.isAdmin()) {
+                throw new Error('Accès non autorisé');
+            }
+
+            // Création de la commande
+            const order = await this.createOrder(amount, 'cash', {
+                userId,
+                receipt
+            });
+
+            // Validation du paiement
+            await this.validateCashPayment(order);
+
+            return order;
+        } catch (error) {
+            console.error('Erreur lors du paiement en espèces:', error);
+            throw error;
+        }
+    }
+
+    // Création d'une commande
+    async createOrder(amount, method, additionalData = {}) {
+        try {
+            const response = await fetch(`${CONFIG.API_URL}/orders`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    amount,
+                    method,
+                    ...additionalData
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la création de la commande');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur lors de la création de la commande:', error);
+            throw error;
+        }
+    }
+
+    // Traitement du paiement Orange Money
+    async processOrangeMoneyPayment(order) {
+        try {
+            // Configuration du paiement PayDunya
+            const payment = this.paydunya.createPayment({
+                total_amount: order.amount,
+                description: `Paiement mensuel - ${order.reference}`,
+                items: [{
+                    name: 'Cotisation mensuelle',
+                    quantity: 1,
+                    unit_price: order.amount,
+                    total_price: order.amount,
+                    description: 'Cotisation mensuelle de la famille SBah'
+                }],
+                channels: ['orange-money'],
+                store: {
+                    name: CONFIG.PAYDUNYA_STORE_NAME
+                }
+            });
+
+            // Redirection vers la page de paiement
+            const checkoutUrl = await payment.getCheckoutUrl();
+            window.location.href = checkoutUrl;
+
+        } catch (error) {
+            console.error('Erreur lors du paiement Orange Money:', error);
+            throw error;
+        }
+    }
+
+    // Traitement du paiement par carte
+    async processCardPayment(order) {
+        try {
+            // Configuration du paiement PayDunya
+            const payment = this.paydunya.createPayment({
+                total_amount: order.amount,
+                description: `Paiement mensuel - ${order.reference}`,
+                items: [{
+                    name: 'Cotisation mensuelle',
+                    quantity: 1,
+                    unit_price: order.amount,
+                    total_price: order.amount,
+                    description: 'Cotisation mensuelle de la famille SBah'
+                }],
+                channels: ['card'],
+                store: {
+                    name: CONFIG.PAYDUNYA_STORE_NAME
+                }
+            });
+
+            // Redirection vers la page de paiement
+            const checkoutUrl = await payment.getCheckoutUrl();
+            window.location.href = checkoutUrl;
+
+        } catch (error) {
+            console.error('Erreur lors du paiement par carte:', error);
+            throw error;
+        }
+    }
+
+    // Validation du paiement en espèces
+    async validateCashPayment(order) {
+        try {
+            const response = await fetch(`${CONFIG.API_URL}/orders/${order.id}/validate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la validation du paiement');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur lors de la validation du paiement:', error);
+            throw error;
+        }
+    }
+
+    // Vérification du statut d'une commande
+    async checkOrderStatus(orderId) {
+        try {
+            const response = await fetch(`${CONFIG.API_URL}/orders/${orderId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la vérification du statut');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur lors de la vérification du statut:', error);
+            throw error;
+        }
+    }
+
+    // Annulation d'une commande
+    async cancelOrder(orderId) {
+        try {
+            const response = await fetch(`${CONFIG.API_URL}/orders/${orderId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de l\'annulation de la commande');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur lors de l\'annulation de la commande:', error);
+            throw error;
+        }
+    }
+
+    // Génération du reçu
+    async generateReceipt(orderId) {
+        try {
+            const response = await fetch(`${CONFIG.API_URL}/orders/${orderId}/receipt`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la génération du reçu');
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `recu-${orderId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+        } catch (error) {
+            console.error('Erreur lors de la génération du reçu:', error);
+            throw error;
+        }
+    }
+}
+
+// Export du gestionnaire
+const paymentHandler = new PaymentHandler();
+export default paymentHandler;
