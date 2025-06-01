@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBah Family - Profil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/profile.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/logo.svg" alt="SBah Family" class="logo">
+                <h1>SBah Family</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="payments.html" class="nav-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Paiements</span>
+                </a>
+                <a href="events.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Événements</span>
+                </a>
+                <a href="members.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Membres</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Historique</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="profile.html" class="profile-link active">
+                    <div class="profile-avatar" id="user-avatar">
+                        <!-- Avatar généré dynamiquement -->
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="user-name">Chargement...</h3>
+                        <p id="user-role">Membre</p>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>Profil</h1>
+                    <p>Gérez vos informations personnelles</p>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Section Avatar -->
+                <div class="profile-section avatar-section">
+                    <div class="avatar-container">
+                        <div class="avatar-wrapper" id="avatar-wrapper">
+                            <!-- Avatar généré dynamiquement -->
+                        </div>
+                        <div class="avatar-actions">
+                            <button class="btn-secondary" id="regenerate-avatar">
+                                <i class="fas fa-sync-alt"></i>
+                                Régénérer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Informations -->
+                <div class="profile-section info-section">
+                    <div class="section-header">
+                        <h2>Informations personnelles</h2>
+                        <button class="btn-icon" id="edit-info">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Nom complet</label>
+                            <div class="info-value" id="full-name">Chargement...</div>
+                            <input type="text" class="info-input" id="full-name-input" style="display: none;">
+                        </div>
+                        <div class="info-item">
+                            <label>Email</label>
+                            <div class="info-value" id="email">Chargement...</div>
+                            <input type="email" class="info-input" id="email-input" style="display: none;">
+                        </div>
+                        <div class="info-item">
+                            <label>Téléphone</label>
+                            <div class="info-value" id="phone">Chargement...</div>
+                            <input type="tel" class="info-input" id="phone-input" style="display: none;">
+                        </div>
+                        <div class="info-item">
+                            <label>Rôle</label>
+                            <div class="info-value" id="role">Chargement...</div>
+                            <select class="info-input" id="role-input" style="display: none;">
+                                <option value="member">Membre</option>
+                                <option value="admin">Administrateur</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Sécurité -->
+                <div class="profile-section security-section">
+                    <div class="section-header">
+                        <h2>Sécurité</h2>
+                    </div>
+                    <div class="security-grid">
+                        <div class="security-item">
+                            <div class="security-info">
+                                <h3>Mot de passe</h3>
+                                <p>Dernière modification: <span id="last-password-change">Chargement...</span></p>
+                            </div>
+                            <button class="btn-secondary" id="change-password">
+                                <i class="fas fa-key"></i>
+                                Modifier
+                            </button>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-info">
+                                <h3>Authentification à deux facteurs</h3>
+                                <p>Ajoutez une couche de sécurité supplémentaire</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="2fa-toggle">
+                                <label for="2fa-toggle"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Préférences -->
+                <div class="profile-section preferences-section">
+                    <div class="section-header">
+                        <h2>Préférences</h2>
+                    </div>
+                    <div class="preferences-grid">
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>Notifications</h3>
+                                <p>Recevoir des notifications par email</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="notifications-toggle">
+                                <label for="notifications-toggle"></label>
+                            </div>
+                        </div>
+                        <div class="preference-item">
+                            <div class="preference-info">
+                                <h3>Thème sombre</h3>
+                                <p>Activer le mode sombre</p>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="dark-mode-toggle">
+                                <label for="dark-mode-toggle"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal de changement de mot de passe -->
+        <div class="modal" id="password-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Changer le mot de passe</h3>
+                    <button class="btn-icon close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="password-form">
+                        <div class="form-group">
+                            <label for="current-password">Mot de passe actuel</label>
+                            <input type="password" id="current-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">Nouveau mot de passe</label>
+                            <input type="password" id="new-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Confirmer le mot de passe</label>
+                            <input type="password" id="confirm-password" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary close-modal">Annuler</button>
+                            <button type="submit" class="btn-primary">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../services/auth-service.js"></script>
+    <script src="../services/sync-service.js"></script>
+    <script src="../services/avatar-service.js"></script>
+    <script src="../services/ui-service.js"></script>
+    <script src="../scripts/profile.js"></script>
+</body>
+</html> 

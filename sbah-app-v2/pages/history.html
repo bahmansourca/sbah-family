@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBah Family - Historique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/history.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/logo.svg" alt="SBah Family" class="logo">
+                <h1>SBah Family</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="payments.html" class="nav-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Paiements</span>
+                </a>
+                <a href="events.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Événements</span>
+                </a>
+                <a href="members.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Membres</span>
+                </a>
+                <a href="history.html" class="nav-item active">
+                    <i class="fas fa-history"></i>
+                    <span>Historique</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="profile.html" class="profile-link">
+                    <div class="profile-avatar" id="user-avatar">
+                        <!-- Avatar généré dynamiquement -->
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="user-name">Chargement...</h3>
+                        <p id="user-role">Membre</p>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>Historique</h1>
+                    <p>Consultez l'historique des activités de la famille</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary" id="export-history">
+                        <i class="fas fa-download"></i>
+                        Exporter
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Filtres -->
+                <div class="filters-section">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="history-search" placeholder="Rechercher dans l'historique...">
+                    </div>
+                    <div class="filter-options">
+                        <select id="type-filter" class="filter-select">
+                            <option value="all">Tous les types</option>
+                            <option value="payment">Paiements</option>
+                            <option value="event">Événements</option>
+                            <option value="member">Membres</option>
+                        </select>
+                        <select id="period-filter" class="filter-select">
+                            <option value="all">Toute période</option>
+                            <option value="today">Aujourd'hui</option>
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois</option>
+                            <option value="year">Cette année</option>
+                        </select>
+                        <button class="btn-secondary" id="reset-filters">
+                            <i class="fas fa-undo"></i>
+                            Réinitialiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Statistiques -->
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Paiements</h3>
+                            <p id="total-payments">0 GNF</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Événements Créés</h3>
+                            <p id="total-events">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Nouveaux Membres</h3>
+                            <p id="new-members">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Activités Totales</h3>
+                            <p id="total-activities">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline-section">
+                    <div class="timeline-header">
+                        <h2>Chronologie des activités</h2>
+                        <div class="timeline-actions">
+                            <button class="btn-icon" id="timeline-view-toggle">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="timeline-container" id="timeline-container">
+                        <!-- Activités générées dynamiquement -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal de détails -->
+        <div class="modal" id="activity-details-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="activity-title">Détails de l'activité</h3>
+                    <button class="btn-icon close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="activity-details">
+                        <div class="detail-header">
+                            <div class="activity-icon" id="activity-icon">
+                                <!-- Icône générée dynamiquement -->
+                            </div>
+                            <div class="activity-info">
+                                <h4 id="activity-type">Type d'activité</h4>
+                                <span class="activity-date" id="activity-date">Date</span>
+                            </div>
+                        </div>
+                        <div class="detail-content">
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <span id="activity-user">Utilisateur</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-info-circle"></i>
+                                <span id="activity-description">Description</span>
+                            </div>
+                            <div class="detail-item" id="activity-amount-container">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span id="activity-amount">Montant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../services/auth-service.js"></script>
+    <script src="../services/sync-service.js"></script>
+    <script src="../services/avatar-service.js"></script>
+    <script src="../services/ui-service.js"></script>
+    <script src="../scripts/history.js"></script>
+</body>
+</html> 

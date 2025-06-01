@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBah Family - Paiements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/payments.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/logo.svg" alt="SBah Family" class="logo">
+                <h1>SBah Family</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="payments.html" class="nav-item active">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Paiements</span>
+                </a>
+                <a href="events.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Événements</span>
+                </a>
+                <a href="members.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Membres</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Historique</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="profile.html" class="profile-link">
+                    <div class="profile-avatar" id="user-avatar">
+                        <!-- Avatar généré dynamiquement -->
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="user-name">Chargement...</h3>
+                        <p id="user-role">Membre</p>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>Paiements</h1>
+                    <p>Effectuez vos paiements mensuels ou pour des événements spéciaux</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" id="new-payment-btn">
+                        <i class="fas fa-plus"></i>
+                        Nouveau paiement
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Options de paiement -->
+                <div class="payment-options">
+                    <div class="option-card" data-amount="300000">
+                        <div class="option-header">
+                            <h3>1 mois</h3>
+                            <span class="badge badge-primary">Populaire</span>
+                        </div>
+                        <div class="option-amount">
+                            <span class="currency">GNF</span>
+                            <span class="amount">300.000</span>
+                        </div>
+                        <p class="option-description">Paiement mensuel standard</p>
+                        <button class="btn-secondary select-option">Sélectionner</button>
+                    </div>
+
+                    <div class="option-card" data-amount="900000">
+                        <div class="option-header">
+                            <h3>3 mois</h3>
+                            <span class="badge badge-success">Économique</span>
+                        </div>
+                        <div class="option-amount">
+                            <span class="currency">GNF</span>
+                            <span class="amount">900.000</span>
+                        </div>
+                        <p class="option-description">Économisez sur les frais de transaction</p>
+                        <button class="btn-secondary select-option">Sélectionner</button>
+                    </div>
+
+                    <div class="option-card" data-amount="1800000">
+                        <div class="option-header">
+                            <h3>6 mois</h3>
+                            <span class="badge badge-warning">Avantageux</span>
+                        </div>
+                        <div class="option-amount">
+                            <span class="currency">GNF</span>
+                            <span class="amount">1.800.000</span>
+                        </div>
+                        <p class="option-description">Paiement semestriel avec bonus</p>
+                        <button class="btn-secondary select-option">Sélectionner</button>
+                    </div>
+
+                    <div class="option-card" data-amount="3600000">
+                        <div class="option-header">
+                            <h3>12 mois</h3>
+                            <span class="badge badge-info">Premium</span>
+                        </div>
+                        <div class="option-amount">
+                            <span class="currency">GNF</span>
+                            <span class="amount">3.600.000</span>
+                        </div>
+                        <p class="option-description">Paiement annuel avec avantages exclusifs</p>
+                        <button class="btn-secondary select-option">Sélectionner</button>
+                    </div>
+                </div>
+
+                <!-- Montant personnalisé -->
+                <div class="custom-amount-section">
+                    <h2>Montant personnalisé</h2>
+                    <div class="custom-amount-form">
+                        <div class="form-group">
+                            <label for="custom-amount">Montant en GNF</label>
+                            <div class="amount-input">
+                                <span class="currency-prefix">GNF</span>
+                                <input type="number" id="custom-amount" min="300000" step="1000" placeholder="300.000">
+                            </div>
+                            <small>Montant minimum : 300.000 GNF</small>
+                        </div>
+                        <button class="btn-primary" id="custom-amount-btn">Continuer</button>
+                    </div>
+                </div>
+
+                <!-- Méthodes de paiement -->
+                <div class="payment-methods-section">
+                    <h2>Méthodes de paiement</h2>
+                    <div class="payment-methods-grid">
+                        <div class="payment-method-card" data-method="orange-money">
+                            <div class="method-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="method-info">
+                                <h3>Orange Money</h3>
+                                <p>Paiement mobile rapide et sécurisé</p>
+                            </div>
+                            <div class="method-check">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" data-method="visa">
+                            <div class="method-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="method-info">
+                                <h3>Carte bancaire</h3>
+                                <p>Visa, Mastercard et autres cartes</p>
+                            </div>
+                            <div class="method-check">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="payment-method-card" data-method="cash">
+                            <div class="method-icon">
+                                <i class="fas fa-money-bill"></i>
+                            </div>
+                            <div class="method-info">
+                                <h3>Espèces</h3>
+                                <p>Paiement en espèces (admin uniquement)</p>
+                            </div>
+                            <div class="method-check">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informations paiement cash -->
+                <div class="cash-payment-info hidden">
+                    <h2>Informations paiement en espèces</h2>
+                    <div class="cash-payment-form">
+                        <div class="form-group">
+                            <label for="cash-user">Membre qui a payé</label>
+                            <select id="cash-user" class="form-control">
+                                <option value="">Sélectionner un membre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cash-receipt">Numéro de reçu (optionnel)</label>
+                            <input type="text" id="cash-receipt" class="form-control" placeholder="Entrez le numéro de reçu">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bouton de paiement -->
+                <div class="payment-actions">
+                    <button class="btn-primary btn-large" id="submit-payment-btn">
+                        <i class="fas fa-lock"></i>
+                        Payer maintenant
+                    </button>
+                    <p class="payment-security">
+                        <i class="fas fa-shield-alt"></i>
+                        Paiement 100% sécurisé
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal de confirmation -->
+        <div class="modal" id="confirmation-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Confirmer le paiement</h3>
+                    <button class="btn-icon close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="confirmation-details">
+                        <div class="detail-item">
+                            <span class="label">Montant :</span>
+                            <span class="value" id="confirmation-amount">0 GNF</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Méthode :</span>
+                            <span class="value" id="confirmation-method">Orange Money</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Date :</span>
+                            <span class="value" id="confirmation-date">Aujourd'hui</span>
+                        </div>
+                    </div>
+                    <div class="confirmation-actions">
+                        <button class="btn-secondary" id="cancel-payment">Annuler</button>
+                        <button class="btn-primary" id="confirm-payment">Confirmer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../services/auth-service.js"></script>
+    <script src="../services/sync-service.js"></script>
+    <script src="../services/avatar-service.js"></script>
+    <script src="../services/ui-service.js"></script>
+    <script src="../scripts/payments.js"></script>
+</body>
+</html> 

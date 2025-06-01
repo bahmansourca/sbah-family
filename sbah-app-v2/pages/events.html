@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBah Family - Événements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/events.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/logo.svg" alt="SBah Family" class="logo">
+                <h1>SBah Family</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="payments.html" class="nav-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Paiements</span>
+                </a>
+                <a href="events.html" class="nav-item active">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Événements</span>
+                </a>
+                <a href="members.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Membres</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Historique</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="profile.html" class="profile-link">
+                    <div class="profile-avatar" id="user-avatar">
+                        <!-- Avatar généré dynamiquement -->
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="user-name">Chargement...</h3>
+                        <p id="user-role">Membre</p>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>Événements</h1>
+                    <p>Gérez les événements familiaux et les contributions</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" id="new-event-btn">
+                        <i class="fas fa-plus"></i>
+                        Nouvel événement
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Filtres -->
+                <div class="filters-section">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="event-search" placeholder="Rechercher un événement...">
+                    </div>
+                    <div class="filter-options">
+                        <select id="status-filter" class="filter-select">
+                            <option value="all">Tous les statuts</option>
+                            <option value="upcoming">À venir</option>
+                            <option value="ongoing">En cours</option>
+                            <option value="completed">Terminés</option>
+                        </select>
+                        <select id="type-filter" class="filter-select">
+                            <option value="all">Tous les types</option>
+                            <option value="birthday">Anniversaire</option>
+                            <option value="wedding">Mariage</option>
+                            <option value="graduation">Diplôme</option>
+                            <option value="other">Autre</option>
+                        </select>
+                        <button class="btn-secondary" id="reset-filters">
+                            <i class="fas fa-undo"></i>
+                            Réinitialiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Calendrier -->
+                <div class="calendar-section">
+                    <div class="calendar-header">
+                        <button class="btn-icon" id="prev-month">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h2 id="current-month">Septembre 2024</h2>
+                        <button class="btn-icon" id="next-month">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Jours de la semaine -->
+                        <div class="calendar-day-header">Dim</div>
+                        <div class="calendar-day-header">Lun</div>
+                        <div class="calendar-day-header">Mar</div>
+                        <div class="calendar-day-header">Mer</div>
+                        <div class="calendar-day-header">Jeu</div>
+                        <div class="calendar-day-header">Ven</div>
+                        <div class="calendar-day-header">Sam</div>
+                        <!-- Jours du mois générés dynamiquement -->
+                    </div>
+                </div>
+
+                <!-- Liste des événements -->
+                <div class="events-section">
+                    <div class="section-header">
+                        <h2>Événements à venir</h2>
+                        <div class="view-options">
+                            <button class="btn-icon active" data-view="grid">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="btn-icon" data-view="list">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="events-container" id="events-container">
+                        <!-- Événements générés dynamiquement -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal de création d'événement -->
+        <div class="modal" id="event-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Nouvel événement</h3>
+                    <button class="btn-icon close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="event-form">
+                        <div class="form-group">
+                            <label for="event-title">Titre de l'événement</label>
+                            <input type="text" id="event-title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-type">Type d'événement</label>
+                            <select id="event-type" class="form-control" required>
+                                <option value="">Sélectionner un type</option>
+                                <option value="birthday">Anniversaire</option>
+                                <option value="wedding">Mariage</option>
+                                <option value="graduation">Diplôme</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="event-date">Date</label>
+                                <input type="date" id="event-date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-time">Heure</label>
+                                <input type="time" id="event-time" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-location">Lieu</label>
+                            <input type="text" id="event-location" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-description">Description</label>
+                            <textarea id="event-description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-amount">Montant demandé (optionnel)</label>
+                            <div class="amount-input">
+                                <span class="currency-prefix">GNF</span>
+                                <input type="number" id="event-amount" class="form-control" min="0" step="1000">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="cancel-event">Annuler</button>
+                            <button type="submit" class="btn-primary">Créer l'événement</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de détails d'événement -->
+        <div class="modal" id="event-details-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="event-details-title">Détails de l'événement</h3>
+                    <button class="btn-icon close-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="event-details">
+                        <div class="event-info">
+                            <div class="info-item">
+                                <i class="fas fa-calendar"></i>
+                                <span id="event-details-date">Date</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <span id="event-details-time">Heure</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="event-details-location">Lieu</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-users"></i>
+                                <span id="event-details-participants">Participants</span>
+                            </div>
+                        </div>
+                        <div class="event-description">
+                            <h4>Description</h4>
+                            <p id="event-details-description">Description de l'événement</p>
+                        </div>
+                        <div class="event-contributions" id="event-contributions">
+                            <h4>Contributions</h4>
+                            <!-- Contributions générées dynamiquement -->
+                        </div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="btn-secondary" id="edit-event">
+                            <i class="fas fa-edit"></i>
+                            Modifier
+                        </button>
+                        <button class="btn-primary" id="contribute-event">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            Contribuer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../services/auth-service.js"></script>
+    <script src="../services/sync-service.js"></script>
+    <script src="../services/avatar-service.js"></script>
+    <script src="../services/ui-service.js"></script>
+    <script src="../scripts/events.js"></script>
+</body>
+</html> 

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBah Family - Accueil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/home.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/logo.svg" alt="SBah Family" class="logo">
+                <h1>SBah Family</h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="payments.html" class="nav-item">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Paiements</span>
+                </a>
+                <a href="events.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Événements</span>
+                </a>
+                <a href="members.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Membres</span>
+                </a>
+                <a href="history.html" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Historique</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="profile.html" class="profile-link">
+                    <div class="profile-avatar" id="user-avatar">
+                        <!-- Avatar généré dynamiquement -->
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="user-name">Chargement...</h3>
+                        <p id="user-role">Membre</p>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>Tableau de bord</h1>
+                    <p>Bienvenue dans votre espace familial</p>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Section Montant Disponible -->
+                <div class="balance-section">
+                    <div class="balance-card">
+                        <div class="balance-info">
+                            <h2>Montant disponible</h2>
+                            <div class="balance-amount" id="available-balance">0 GNF</div>
+                            <p class="balance-update">Dernière mise à jour: <span id="last-update">Chargement...</span></p>
+                        </div>
+                        <div class="balance-actions">
+                            <button class="btn-primary" id="refresh-balance">
+                                <i class="fas fa-sync-alt"></i>
+                                Actualiser
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Statistiques -->
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Membres actifs</h3>
+                            <div class="stat-value" id="active-members">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Événements à venir</h3>
+                            <div class="stat-value" id="upcoming-events">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Paiements du mois</h3>
+                            <div class="stat-value" id="monthly-payments">0 GNF</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Activités Récentes -->
+                <div class="recent-activities">
+                    <div class="section-header">
+                        <h2>Activités récentes</h2>
+                        <a href="history.html" class="btn-text">Voir tout</a>
+                    </div>
+                    <div class="activities-list" id="activities-list">
+                        <!-- Activités chargées dynamiquement -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../services/auth-service.js"></script>
+    <script src="../services/sync-service.js"></script>
+    <script src="../services/avatar-service.js"></script>
+    <script src="../services/ui-service.js"></script>
+    <script src="../scripts/home.js"></script>
+</body>
+</html> 
