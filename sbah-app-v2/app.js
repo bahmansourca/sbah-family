@@ -14,7 +14,7 @@ const socket = io(API_URL, {
 
 // État de l'application
 let state = {
-    user: null,
+    familyMembers: [],
     balance: 0,
     transactions: [],
     ceremonies: []
@@ -202,12 +202,24 @@ function hideLoading() {
 async function loadInitialData() {
     try {
         await Promise.all([
+            loadFamilyMembers(),
             loadBalance(),
             loadTransactions(),
             loadCeremonies()
         ]);
     } catch (error) {
         console.error('Erreur chargement données:', error);
+    }
+}
+
+async function loadFamilyMembers() {
+    try {
+        const response = await fetch(`${API_URL}/family-members`);
+        const data = await response.json();
+        state.familyMembers = data;
+        updateFamilyMembersDisplay();
+    } catch (error) {
+        console.error('Erreur chargement membres:', error);
     }
 }
 
@@ -257,6 +269,26 @@ async function loadCeremonies() {
 }
 
 // Mise à jour de l'affichage
+function updateFamilyMembersDisplay() {
+    const container = document.querySelector('.family-members-container');
+    if (!container) return;
+
+    container.innerHTML = state.familyMembers.map(member => `
+        <div class="family-member-card">
+            <div class="member-info">
+                <h3>${member.name}</h3>
+                <p>${member.role}</p>
+                <p>${member.phone}</p>
+                <p>${member.city}, ${member.country}</p>
+            </div>
+            <div class="member-actions">
+                <button onclick="editMember(${member.id})" class="edit-button">Modifier</button>
+                <button onclick="deleteFamilyMember(${member.id})" class="delete-button">Supprimer</button>
+            </div>
+        </div>
+    `).join('');
+}
+
 function updateBalanceDisplay() {
     const balanceElement = document.querySelector('.balance-amount');
     if (balanceElement) {
@@ -384,6 +416,101 @@ async function initializePayment(amount) {
     }
 }
 
+// Gestion des membres de la famille
+async function addFamilyMember(memberData) {
+    try {
+        showLoading('Ajout du membre...');
+        const response = await fetch(`${API_URL}/family-members`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(memberData)
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.message || "Erreur lors de l'ajout du membre");
+        }
+
+        const newMember = await response.json();
+        state.familyMembers.push(newMember);
+        updateFamilyMembersDisplay();
+        
+        hideLoading();
+        showNotification('Succès', 'Membre ajouté avec succès !', 'success');
+        document.getElementById('add-member-form').reset();
+        
+    } catch (error) {
+        hideLoading();
+        showNotification('Erreur', error.message, 'error');
+    }
+}
+
+async function updateFamilyMember(id, memberData) {
+    try {
+        showLoading('Mise à jour du membre...');
+        const response = await fetch(`${API_URL}/family-members/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(memberData)
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.message || "Erreur lors de la mise à jour du membre");
+        }
+
+        const updatedMember = await response.json();
+        state.familyMembers = state.familyMembers.map(member => 
+            member.id === id ? updatedMember : member
+        );
+        updateFamilyMembersDisplay();
+        
+        hideLoading();
+        showNotification('Succès', 'Membre mis à jour avec succès !', 'success');
+        
+    } catch (error) {
+        hideLoading();
+        showNotification('Erreur', error.message, 'error');
+    }
+}
+
+async function deleteFamilyMember(id) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce membre ?')) {
+        return;
+    }
+
+    try {
+        showLoading('Suppression du membre...');
+        const response = await fetch(`${API_URL}/family-members/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.message || "Erreur lors de la suppression du membre");
+        }
+
+        state.familyMembers = state.familyMembers.filter(member => member.id !== id);
+        updateFamilyMembersDisplay();
+        
+        hideLoading();
+        showNotification('Succès', 'Membre supprimé avec succès !', 'success');
+        
+    } catch (error) {
+        hideLoading();
+        showNotification('Erreur', error.message, 'error');
+    }
+}
+
 // Écouteurs d'événements
 document.addEventListener('DOMContentLoaded', () => {
     // Formulaire de connexion
@@ -444,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('logout-button').addEventListener('click', () => {
         localStorage.removeItem('token');
         state = {
-            user: null,
+            familyMembers: [],
             balance: 0,
             transactions: [],
             ceremonies: []
@@ -480,6 +607,26 @@ document.addEventListener('DOMContentLoaded', () => {
             showLoginScreen();
         });
     }
+
+    // Formulaire d'ajout de membre
+    document.getElementById('add-member-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const memberData = {
+            name: document.getElementById('member-name').value.trim(),
+            role: document.getElementById('member-role').value.trim(),
+            phone: document.getElementById('member-phone').value.trim(),
+            country: document.getElementById('member-country').value,
+            city: document.getElementById('member-city').value.trim()
+        };
+
+        // Validation des champs
+        if (!memberData.name || !memberData.role || !memberData.phone || !memberData.country || !memberData.city) {
+            showNotification('Erreur', 'Veuillez remplir tous les champs', 'error');
+            return;
+        }
+
+        await addFamilyMember(memberData);
+    });
 
     // Socket.IO
     socket.on('transaction_update', (data) => {
