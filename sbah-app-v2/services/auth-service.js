@@ -68,6 +68,15 @@ class AuthService {
         window.location.href = 'login.html';
     }
 
+    // Vérifier l'authentification et rediriger si nécessaire
+    checkAuth() {
+        if (!this.isAuthenticated()) {
+            window.location.href = 'login.html';
+            return false;
+        }
+        return true;
+    }
+
     // Mise à jour du profil
     async updateProfile(userData) {
         try {
